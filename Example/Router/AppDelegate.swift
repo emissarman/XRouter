@@ -17,7 +17,7 @@ import XRouter
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     /// Router
-    let router = Router<Route>()
+    let router = Router<MyRoute>()
 
     /// Window
     var window: UIWindow?
@@ -32,7 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = UINavigationController(rootViewController: AppDelegate.homeViewController)
         window?.makeKeyAndVisible()
         
-        navigateToNextRoute(delay: 3)
+        let delay: TimeInterval = 1.5
+        openURLS(delay: delay, andThen: {
+            self.navigateToNextRoute(delay: delay)
+        })
+        
         return true
     }
     
@@ -42,17 +46,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var currentPageIndex = 0
     
     /// Pages to cycle through
-    private let pages: [Route] = [
-        .home,
+    private let pages: [MyRoute] = [
         .red,
-        .blue,
+        .blue(named: "default"),
         .other(color: .purple),
         .other(color: .yellow),
         .exampleFlowBasic,
         .exampleFlowFull,
         .home,
         .exampleFlowFull,
-        .blue,
+        .blue(named: "default"),
         .other(color: .purple),
         .exampleFlowBasic,
         .home,
@@ -60,6 +63,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         .other(color: .orange),
         .red
     ]
+    
+    /// Open all the URLs
+    private func openURLS(delay: TimeInterval = 3, andThen completion: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            guard let url = URL(string: "https://example.com/colors/red") else { return }
+            print("Routing to red")
+            _ = try! self.router.openURL(url)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                guard let url = URL(string: "https://example.com/colors/blue/link") else { return }
+                print("Routing to blue")
+                _ = try! self.router.openURL(url)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    guard let url = URL(string: "https://example.com/home") else { return }
+                    print("Routing to home")
+                    _ = try! self.router.openURL(url)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: completion)
+                }
+            }
+        }
+    }
     
     /// Go to the next route
     private func navigateToNextRoute(delay: TimeInterval = 3) {
@@ -75,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     /// Get a the next route
-    private func getNextRoute() -> Route {
+    private func getNextRoute() -> MyRoute {
         let nextRoute = pages[currentPageIndex]
         currentPageIndex = (currentPageIndex + 1) % pages.count
         return nextRoute

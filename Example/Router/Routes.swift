@@ -12,7 +12,7 @@ import XRouter
  Example Routes
  
  */
-enum Route: RouteProvider {
+enum MyRoute: RouteProvider {
     
     /// Root view controller
     case home
@@ -21,7 +21,7 @@ enum Route: RouteProvider {
     case red
     
     /// Pushed blue view controller
-    case blue
+    case blue(named: String)
     
     /// Presented modally some example navigation controller.
     ///  Skips directly to 2/3 view controllers
@@ -63,8 +63,8 @@ enum Route: RouteProvider {
             return AppDelegate.homeViewController
         case .red:
             return ColoredViewController(color: .red, title: "red")
-        case .blue:
-            return ColoredViewController(color: .blue, title: "blue")
+        case .blue(let name):
+            return ColoredViewController(color: .blue, title: "blue \(name)")
         case .exampleFlowBasic:
             return ExampleFlowController.shared.startBasicFlow()
         case .exampleFlowFull:
@@ -72,6 +72,15 @@ enum Route: RouteProvider {
         case .other(let color):
             // Embedded in a navigation controller
             return UINavigationController(rootViewController: ColoredViewController(color: color, title: name))
+        }
+    }
+    
+    /// Register the url patterns these routes can map to
+    static func registerURLs() -> Router<MyRoute>.URLMatcherGroup? {
+        return .group(["example.com"]) {
+            $0.map("home/") { .home }
+            $0.map("colors/red") { .red }
+            $0.map("colors/blue/{name}") { try .blue(named: $0.param("name")) }
         }
     }
     
