@@ -1,6 +1,6 @@
 //
 //  RouteProviderProtocol.swift
-//  Router
+//  XRouter
 //
 //  Created by Reece Como on 5/1/19.
 //
@@ -44,6 +44,20 @@ public protocol RouteProvider: Equatable {
     ///
     func prepareForTransition(from viewController: UIViewController) throws -> UIViewController
     
+    ///
+    /// Register a URL matcher group.
+    ///
+    /// Example:
+    /// ```
+    /// return .group(["website.com", "sales.website.com"]) {
+    ///     $0.map("products") { .allProducts(page: $0.query("page") ?? 0) }
+    ///     $0.map("products/{category}/") { try .productsShowcase(category: $0.param("category")) }
+    ///     $0.map("user/*/logout") { .userLogout }
+    /// }
+    /// ```
+    ///
+    static func registerURLs() -> Router<Self>.URLMatcherGroup?
+    
 }
 
 extension RouteProvider {
@@ -58,6 +72,11 @@ extension RouteProvider {
     /// Route name (default: `baseName`)
     public var name: String {
         return baseName
+    }
+    
+    /// Register URLs (default: none)
+    public static func registerURLs() -> Router<Self>.URLMatcherGroup? {
+        return nil
     }
     
 }
