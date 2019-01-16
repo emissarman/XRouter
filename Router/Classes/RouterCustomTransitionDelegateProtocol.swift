@@ -18,6 +18,7 @@ public protocol RouterCustomTransitionDelegate: class {
     func performTransition(to viewController: UIViewController,
                            from sourceViewController: UIViewController,
                            transition: RouteTransition,
-                           animated: Bool)
+                           animated: Bool,
+                           completion: ((Error?) -> Void)?)
     
 }

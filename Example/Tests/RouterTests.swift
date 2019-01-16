@@ -26,86 +26,80 @@ class RouterTests: XCTestCase {
     
     /// Test routing works as expected when the root view controller is a navigation controller
     func testRoutingWithUINavigationController() {
-        let router = MockRouter<TestRoute>()
-        
         // Create initial navigation stack
         let navigationController = UINavigationController(rootViewController: RouterTests.homeViewController)
-        UIApplication.shared.keyWindow?.rootViewController = navigationController
+        let router = MockRouter<TestRoute>(rootViewController: navigationController)
         
         assertRoutingPathsWork(using: router)
     }
     
     /// Test routing works as expected when the root view controller is a tab bar controller
     func testRoutingWithUITabBarController() {
-        let router = MockRouter<TestRoute>()
-        
         // Create initial navigation stack
         let tabBarController = UITabBarController()
         let nestedNavigationController = UINavigationController(rootViewController: RouterTests.homeViewController)
         tabBarController.setViewControllers([nestedNavigationController], animated: false)
-        UIApplication.shared.keyWindow?.rootViewController = tabBarController
+        
+        let router = MockRouter<TestRoute>(rootViewController: tabBarController)
         
         assertRoutingPathsWork(using: router)
         
-        try! router.navigate(to: .secondHomeVC)
+        navigate(router, to: .secondHomeVC)
         XCTAssertEqual(router.currentRoute!, .secondHomeVC)
         XCTAssertEqual(router.currentRoute!.transition, .set)
     }
     
     /// Test navigate throws an error when the route transition requires a navigation controller, but one is not available
     func testNavigateFailsWhenNoNavigationControllerPresentButIsRequiredByTransition() {
-        let router = MockRouter<TestRoute>()
-        
         // Create initial navigation stack with a single tab bar controller containing a view controller
         let tabBarController = UITabBarController()
         tabBarController.setViewControllers([RouterTests.homeViewController], animated: false)
-        UIApplication.shared.keyWindow?.rootViewController = tabBarController
+        let router = MockRouter<TestRoute>(rootViewController: tabBarController)
         
-        // This will throw an RouterError.missingRequiredNavigationController
-        XCTAssertThrowsError(try router.navigate(to: .settingsVC))
+        // This will throw an RouterError.missingRequiredNavigationController(for: .push)
+        navigateExpectError(router, to: .settingsVC, error: RouterError.missingRequiredNavigationController(for: .push))
     }
     
     /// Test navigate succeeds when the route transition requires a navigation controller, and one is available
     func testNavigateSucceedsNavigationControllerPresentAndIsRequiredByTransition() {
-        let router = MockRouter<TestRoute>()
-        
         // Create initial navigation stack
         let tabBarController = UITabBarController()
         let nestedNavigationController = UINavigationController(rootViewController: RouterTests.homeViewController)
         tabBarController.setViewControllers([nestedNavigationController], animated: false)
-        UIApplication.shared.keyWindow?.rootViewController = tabBarController
         
-        try! router.navigate(to: .settingsVC)
-        XCTAssertEqual(router.currentRoute!, .settingsVC)
-        XCTAssertEqual(router.currentRoute!.transition, .push)
+        let router = MockRouter<TestRoute>(rootViewController: tabBarController)
+        
+        navigate(router, to: .settingsVC)
+        XCTAssertEqual(router.currentRoute, .settingsVC)
+        XCTAssertEqual(router.currentRoute?.transition, .push)
     }
     
     /// Test that errors thrown in `RouteProvider(_:).prepareForTransition` are passed through to `navigate(to:animated:)`
     func testFowardsErrorsThrownInRouteProviderPrepareForTransition() {
-        let router = MockRouter<TestRoute>()
+        let router = MockRouter<TestRoute>(rootViewController: UIViewController())
         
-        do {
-            try router.navigate(to: .alwaysFails)
-            XCTFail("navigate(to:animated:) was expected to throw an error, but did not")
-        } catch {
-            XCTAssertEqual((error as NSError).code, RouterTests.routeProviderMockErrorCode)
+        guard let error = navigate(router, to: .alwaysFails, failOnError: false) else {
+            XCTFail("Expected error, but none received")
+            return
         }
+        
+        XCTAssertEqual((error as NSError).code, RouterTests.routeProviderMockErrorCode)
     }
     
     /// Test custom transition delegate is triggered
     func testCustomTransitionDelegateIsTriggered() {
         let mockCustomTransitionDelegate = MockRouterCustomTransitionDelegate()
-        let router = MockRouter<TestRoute>()
+        let router = MockRouter<TestRoute>(rootViewController: UIViewController())
         router.customTransitionDelegate = mockCustomTransitionDelegate
         
         XCTAssertNil(mockCustomTransitionDelegate.lastTransitionPerformed)
-        try? router.navigate(to: .customTransitionVC)
+        navigate(router, to: .customTransitionVC)
         XCTAssertEqual(mockCustomTransitionDelegate.lastTransitionPerformed, .custom(identifier: "customTransition"))
     }
     
     /// Test
     func testURLRouterFailsSilentlyWhenNoRoutesRegistered() {
-        let router = MockRouter<TestRoute>()
+        let router = MockRouter<TestRoute>(rootViewController: UIViewController())
         
         try! router.openURL(URL(string: "http://example.com/static/route")!)
         XCTAssertNil(router.currentRoute)
@@ -118,37 +112,63 @@ class RouterTests: XCTestCase {
     /// Assert routing works in current circumstance, given this router
     private func assertRoutingPathsWork(using router: MockRouter<TestRoute>) {
         // Navigate to home view controller (even though we're already there)
-        try! router.navigate(to: .homeVC)
+        navigate(router, to: .homeVC)
         XCTAssertEqual(router.currentRoute!, .homeVC)
         XCTAssertEqual(router.currentRoute!.transition, .set)
         
-        try! router.navigate(to: .settingsVC)
+        navigate(router, to: .settingsVC)
         XCTAssertEqual(router.currentRoute!, .settingsVC)
         XCTAssertEqual(router.currentRoute!.transition, .push)
         
-        try! router.navigate(to: .nestedModalGroup)
+        navigate(router, to: .nestedModalGroup)
         XCTAssertEqual(router.currentRoute!, .nestedModalGroup)
         XCTAssertEqual(router.currentRoute!.transition, .modal)
         
         // Missing custom navigation delegate
-        XCTAssertThrowsError(try router.navigate(to: .customTransitionVC))
+        navigateExpectError(router, to: .customTransitionVC, error: RouterError.missingCustomTransitionDelegate)
         
         // Lets navigate now to a second popover modal before moving back to .home
-        try! router.navigate(to: .nestedModalGroup)
+        navigate(router, to: .nestedModalGroup)
         XCTAssertEqual(router.currentRoute!, .nestedModalGroup)
         XCTAssertEqual(router.currentRoute!.transition, .modal)
         
-        try! router.navigate(to: .singleModalVC)
+        navigate(router, to: .singleModalVC)
         XCTAssertEqual(router.currentRoute!, .singleModalVC)
         XCTAssertEqual(router.currentRoute!.transition, .modal)
         
         // Test that going back to a route with a `.set` transition succeeds
-        try! router.navigate(to: .homeVC)
+        navigate(router, to: .homeVC)
         XCTAssertEqual(router.currentRoute!, .homeVC)
         
         // Test calling a failing/cancelled route does not change the current route
-        try? router.navigate(to: .alwaysFails)
+        navigate(router, to: .alwaysFails, failOnError: false)
         XCTAssertEqual(router.currentRoute!, .homeVC)
+    }
+    
+    /// Blocking helper function
+    @discardableResult
+    func navigate<Route: RouteProvider>(_ router: Router<Route>, to route: Route, failOnError: Bool = true) -> Error? {
+        let expectation = self.expectation(description: "Navigate to router")
+        var receivedError: Error?
+        
+        router.navigate(to: route, animated: false) { error in
+            receivedError = error
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: nil)
+        
+        if failOnError, let error = receivedError {
+            XCTFail("Unexpected error occured: \(error.localizedDescription)")
+        }
+        
+        return receivedError
+    }
+    
+    /// Blocking helper function
+    func navigateExpectError<Route: RouteProvider>(_ router: Router<Route>, to route: Route, error expectedError: Error) {
+        let actualError = navigate(router, to: route, failOnError: false)
+        XCTAssertEqual(actualError?.localizedDescription, expectedError.localizedDescription)
     }
     
 }
@@ -215,10 +235,12 @@ private class MockRouterCustomTransitionDelegate: RouterCustomTransitionDelegate
     private(set) var lastTransitionPerformed: RouteTransition?
     
     func performTransition(to viewController: UIViewController,
-                           from parentViewController: UIViewController,
+                           from sourceViewController: UIViewController,
                            transition: RouteTransition,
-                           animated: Bool) {
+                           animated: Bool,
+                           completion: ((Error?) -> Void)?) {
         lastTransitionPerformed = transition
+        completion?(nil)
     }
     
 }
