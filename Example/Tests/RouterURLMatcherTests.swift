@@ -20,27 +20,29 @@ class RouterURLMatcherTests: XCTestCase {
     
     /// Test static routes
     func testURLRouterCanMapStaticRoutes() {
-        let router = MockRouter<TestRoute>()
+        let router = MockRouter<TestRoute>(rootViewController: UINavigationController(rootViewController: UIViewController()))
+        print("Truthy:")
+        print(UIApplication.shared.getTopViewController() != nil)
         
-        try! router.openURL(URL(string: "http://example.com/invalid/route")!)
+        openURL(router, url: URL(string: "http://example.com/invalid/route")!)
         XCTAssertNil(router.currentRoute)
         
-        try! router.openURL(URL(string: "http://example.com/static/route")!)
+        openURL(router, url: URL(string: "http://example.com/static/route")!)
         XCTAssertEqual(router.currentRoute, .exampleStaticRoute)
     }
     
     /// Test dynamic string routes
     func testURLRouterCanMapDynamicStringRoutes() {
-        let router = MockRouter<TestRoute>()
+        let router = MockRouter<TestRoute>(rootViewController: UINavigationController(rootViewController: UIViewController()))
         
-        try! router.openURL(URL(string: "http://example.com/dynamic/string/spaghetti")!)
+        openURL(router, url: URL(string: "http://example.com/dynamic/string/spaghetti")!)
         if case let TestRoute.exampleStringDynamicRoute(name) = router.currentRoute! {
             XCTAssertEqual(name, "spaghetti")
         } else {
             XCTFail("Was expecting spaghetti")
         }
         
-        try! router.openURL(URL(string: "http://example.com/dynamic/string/walrus")!)
+        openURL(router, url: URL(string: "http://example.com/dynamic/string/walrus")!)
         if case let TestRoute.exampleStringDynamicRoute(name) = router.currentRoute! {
             XCTAssertEqual(name, "walrus")
         } else {
@@ -50,16 +52,16 @@ class RouterURLMatcherTests: XCTestCase {
     
     /// Test dynamic string routes
     func testURLRouterCanMapDynamicIntRoutes() {
-        let router = MockRouter<TestRoute>()
+        let router = MockRouter<TestRoute>(rootViewController: UINavigationController(rootViewController: UIViewController()))
         
-        try! router.openURL(URL(string: "http://example.com/dynamic/int/1235")!)
+        openURL(router, url: URL(string: "http://example.com/dynamic/int/1235")!)
         if case let TestRoute.exampleIntDynamicRoute(number) = router.currentRoute! {
             XCTAssertEqual(number, 1235)
         } else {
             XCTFail("Was expecting 1235")
         }
         
-        try! router.openURL(URL(string: "http://example.com/dynamic/int/3411")!)
+        openURL(router, url: URL(string: "http://example.com/dynamic/int/3411")!)
         if case let TestRoute.exampleIntDynamicRoute(number) = router.currentRoute! {
             XCTAssertEqual(number, 3411)
         } else {
@@ -69,12 +71,12 @@ class RouterURLMatcherTests: XCTestCase {
     
     /// Test dynamic string routes
     func testURLRouterCanMapWildcardRoutes() {
-        let router = MockRouter<TestRoute>()
+        let router = MockRouter<TestRoute>(rootViewController: UINavigationController(rootViewController: UIViewController()))
         
-        try! router.openURL(URL(string: "http://example.com/dynamic/wildcard-test/whatever")!)
+        openURL(router, url: URL(string: "http://example.com/dynamic/wildcard-test/whatever")!)
         XCTAssertNil(router.currentRoute)
         
-        try! router.openURL(URL(string: "http://example.com/dynamic/wildcard/something/whatever")!)
+        openURL(router, url: URL(string: "http://example.com/dynamic/wildcard/something/whatever")!)
         XCTAssertEqual(router.currentRoute, .exampleWildcardRoute)
     }
     
@@ -90,35 +92,35 @@ class RouterURLMatcherTests: XCTestCase {
     
     /// Test dynamic string routes
     func testQueryStringParameters() {
-        let router = MockRouter<TestRoute>()
+        let router = MockRouter<TestRoute>(rootViewController: UINavigationController(rootViewController: UIViewController()))
         XCTAssertNil(router.currentRoute)
         
         // No parameter should set parameter to 0
-        try! router.openURL(URL(string: "http://example.com/some-qs/route?whatIsTheTime")!)
-        if case let TestRoute.exampleQueryStringRoute(pageNumber) = router.currentRoute! {
+        openURL(router, url: URL(string: "http://example.com/some-qs/route?whatIsTheTime")!)
+        if let route = router.currentRoute, case let TestRoute.exampleQueryStringRoute(pageNumber) = route {
             XCTAssertEqual(pageNumber, 0)
         } else {
             XCTFail("Was expecting page number to equal 0")
         }
         
         // Valid page parameter should set value to 7
-        try! router.openURL(URL(string: "http://example.com/some-qs/route?page=7")!)
-        if case let TestRoute.exampleQueryStringRoute(pageNumber) = router.currentRoute! {
+        openURL(router, url: URL(string: "http://example.com/some-qs/route?page=7")!)
+        if let route = router.currentRoute, case let TestRoute.exampleQueryStringRoute(pageNumber) = route {
             XCTAssertEqual(pageNumber, 7)
         } else {
             XCTFail("Was expecting page number to equal 7")
         }
         
         // Invalid should default to 0
-        try! router.openURL(URL(string: "http://example.com/some-qs/route?page=tortoise")!)
-        if case let TestRoute.exampleQueryStringRoute(pageNumber) = router.currentRoute! {
+        openURL(router, url: URL(string: "http://example.com/some-qs/route?page=tortoise")!)
+        if let route = router.currentRoute, case let TestRoute.exampleQueryStringRoute(pageNumber) = route {
             XCTAssertEqual(pageNumber, 0)
         } else {
             XCTFail("Was expecting page number to equal 0")
         }
         
         // String parameters
-        try! router.openURL(URL(string: "http://example.com/some/other-qs/route?name=tortoise")!)
+        openURL(router, url: URL(string: "http://example.com/some/other-qs/route?name=tortoise")!)
         if case let TestRoute.exampleQueryStringRoute2(name) = router.currentRoute! {
             XCTAssertEqual(name, "tortoise")
         } else {
@@ -128,14 +130,14 @@ class RouterURLMatcherTests: XCTestCase {
     
     /// Test dynamic string routes
     func testRouteMissingParamTriggersError() {
-        let router = MockRouter<TestRoute>()
-        XCTAssertThrowsError(try router.openURL(URL(string: "http://example.com/route/missing/param")!))
+        let router = MockRouter<TestRoute>(rootViewController: UINavigationController(rootViewController: UIViewController()))
+        openURLExpectError(router, url: URL(string: "http://example.com/route/missing/param")!, error: RouterError.missingRequiredParameterWhileUnwrappingURLRoute(parameter: "whoops"))
     }
     
     /// Test dynamic string routes
     func testRouteInvalidIntegerParameterTriggersError() {
-        let router = MockRouter<TestRoute>()
-        XCTAssertThrowsError(try router.openURL(URL(string: "http://example.com/dynamic/int/three")!))
+        let router = MockRouter<TestRoute>(rootViewController: UINavigationController(rootViewController: UIViewController()))
+        openURLExpectError(router, url: URL(string: "http://example.com/dynamic/int/three")!, error: RouterError.requiredIntegerParameterWasNotAnInteger(parameter: "id", stringValue: "three"))
     }
     
 }

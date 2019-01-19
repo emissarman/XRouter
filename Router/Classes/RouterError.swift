@@ -14,6 +14,10 @@ public enum RouterError {
     
     // MARK: - Errors
     
+    /// There is currently no top view controller on the navigation stack
+    /// - Note: This really won't ever occur, unless you are doing something super bizarre with the `UIWindow(_:).rootViewController`.
+    case missingSourceViewController
+    
     /// The route transition can only be called from a UINavigationController
     case missingRequiredNavigationController(for: RouteTransition)
     
@@ -38,6 +42,11 @@ extension RouterError: LocalizedError {
     /// A localized message describing what error occurred.
     public var errorDescription: String? {
         switch self {
+        case .missingSourceViewController:
+            return """
+            The source view controller (AKA current top view controller) was unexpectedly `nil`.
+            This could be because the top view controller is an empty navigation controller.
+            """
         case .missingRequiredNavigationController(let transition):
             return """
             You cannot navigate to this route using transition \"\(transition.name)\" without a navigation controller.
@@ -65,6 +74,10 @@ extension RouterError: LocalizedError {
     /// A localized message describing how one might recover from the failure.
     public var recoverySuggestion: String? {
         switch self {
+        case .missingSourceViewController:
+            return """
+            Something unexpected has happened and the source view controller was not able to be located.
+            """
         case .missingRequiredNavigationController:
             return """
             Nest the parent view controller in a `UINavigationController`.

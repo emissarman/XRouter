@@ -42,19 +42,24 @@ open class Router<Route: RouteProvider> {
     ///
     /// Navigate to a route.
     ///
-    /// - Note: Has no effect if routing to the view controller/navigation controller you are already on,
-    ///          where the view controller is provided by `RouteProvider(_:).prepareForTransition(...)`
+    /// - Note: Has no effect if the destination view controller is the view controller or navigation controller
+    ///         you are presently on - as provided by `RouteProvider(_:).prepareForTransition(...)`.
     ///
-    open func navigate(to route: Route, animated: Bool = true) throws {
-        try prepareForNavigation(to: route, animated: animated) { newViewController in
-            guard let currentViewController = self.currentTopViewController else { return }
+    open func navigate(to route: Route, animated: Bool = true, completion: ((Error?) -> Void)? = nil) {
+        prepareForNavigation(to: route, animated: animated, successHandler: { destinationViewController in
+            guard let sourceViewController = self.currentTopViewController else {
+                completion?(RouterError.missingSourceViewController)
+                return
+            }
             
-            try self.performNavigation(to: newViewController,
-                                       from: currentViewController,
-                                       with: route.transition,
-                                       animated: animated)
-        }
-        
+            self.performNavigation(to: destinationViewController,
+                                   from: sourceViewController,
+                                   with: route.transition,
+                                   animated: animated,
+                                   completion: completion)
+        }, errorHandler: { error in
+            completion?(error)
+        })
     }
     
     ///
@@ -64,17 +69,28 @@ open class Router<Route: RouteProvider> {
     ///         implementing the static method `registerURLs`.
     ///
     @discardableResult
-    open func openURL(_ url: URL) throws -> Bool {
-        guard let urlMatcherGroup = urlMatcherGroup else { return false }
+    open func openURL(_ url: URL, animated: Bool = true, completion: ((Error?) -> Void)? = nil) -> Bool {
+        var hasMatched = false
         
-        for urlMatcher in urlMatcherGroup.matchers {
-            if let route = try urlMatcher.match(url: url) {
-                try navigate(to: route)
-                return true
+        if let urlMatcherGroup = urlMatcherGroup {
+            do {
+                for urlMatcher in urlMatcherGroup.matchers {
+                    if let route = try urlMatcher.match(url: url) {
+                        navigate(to: route, animated: animated, completion: completion)
+                        hasMatched = true
+                    }
+                }
+            } catch {
+                completion?(error)
+                return false
             }
         }
         
-        return false
+        if !hasMatched {
+            completion?(nil)
+        }
+        
+        return hasMatched
     }
     
     // MARK: - Implementation
@@ -89,15 +105,26 @@ open class Router<Route: RouteProvider> {
     ///
     private func prepareForNavigation(to route: Route,
                                       animated: Bool,
-                                      whenReady completion: @escaping (UIViewController) throws -> Void) throws {
-        guard let currentViewController = currentTopViewController else { return }
+                                      successHandler: @escaping (UIViewController) -> Void,
+                                      errorHandler: @escaping (Error) -> Void) {
+        guard let currentViewController = currentTopViewController else {
+            errorHandler(RouterError.missingSourceViewController)
+            return
+        }
         
-        let newViewController = try route.prepareForTransition(from: currentViewController)
+        /// Get destination view controller
+        let newViewController: UIViewController
+        do {
+            newViewController = try route.prepareForTransition(from: currentViewController)
+        } catch {
+            errorHandler(error)
+            return
+        }
         
         if newViewController === currentViewController.navigationController
             || newViewController === currentViewController {
             // We're already presenting this view controller (or its navigation controller).
-            try completion(newViewController)
+            successHandler(newViewController)
         } else if newViewController.isActive() {
             // Trying to route to a view controller that is already presented somewhere
             //   in an existing navigation stack.
@@ -105,69 +132,80 @@ open class Router<Route: RouteProvider> {
             guard currentViewController.hasAncestor(newViewController) else {
                 // If this is not an ancestor of the current view controller, then we won't
                 //  be able to automatically find a route.
-                throw RouterError.unableToFindRouteToViewController
+                errorHandler(RouterError.unableToFindRouteToViewController)
+                return
             }
             
             if let currentNavController = currentViewController.navigationController,
                 !currentNavController.isBeingPresented,
                 currentNavController == newViewController.navigationController {
-                try? completion(newViewController)
+                successHandler(newViewController)
             } else {
                 // In the meantime let's attempt to find a route by dismissing any modals.
                 newViewController.dismiss(animated: animated) {
-                    // We were unable to tell ahead of time if there was any errors.
-                    // - Note: We could move this to an error closure, but I'm not sure
-                    //         what advantage that would give us.
-                    try? completion(newViewController)
+                    successHandler(newViewController)
                 }
             }
         } else {
-            try completion(newViewController)
+            successHandler(newViewController)
         }
     }
     
     /// Perform navigation
-    private func performNavigation(to newViewController: UIViewController,
-                                   from currentViewController: UIViewController,
+    private func performNavigation(to destinationViewController: UIViewController,
+                                   from sourceViewController: UIViewController,
                                    with transition: RouteTransition,
-                                   animated: Bool) throws {
+                                   animated: Bool,
+                                   completion: ((Error?) -> Void)?) {
         // Sanity check, don't navigate if we're already here,
         //  or we're trying to set THIS view controller's navigation controller
-        if newViewController === currentViewController
-            || newViewController === currentViewController.navigationController {
+        if destinationViewController === sourceViewController
+            || destinationViewController === sourceViewController.navigationController {
+            // No error? -- maybe throw an "already here" error
+            completion?(nil)
             return
         }
         
         // The source view controller will be the navigation controller where
         //  possible - but will otherwise default to the current view controller
         //  i.e. for "present" transitions.
-        let sourceViewController = currentViewController.navigationController ?? currentViewController
+        let sourceViewController = sourceViewController.navigationController ?? sourceViewController
         
         switch transition {
         case .push:
-            guard let navController = sourceViewController as? UINavigationController else {
-                throw RouterError.missingRequiredNavigationController(for: transition)
+            if let navController = sourceViewController as? UINavigationController {
+                navController.pushViewController(destinationViewController, animated: animated) {
+                    completion?(nil)
+                }
+            } else {
+                completion?(RouterError.missingRequiredNavigationController(for: transition))
             }
-            navController.pushViewController(newViewController, animated: animated)
+            
             
         case .set:
-            guard let navController = sourceViewController as? UINavigationController else {
-                throw RouterError.missingRequiredNavigationController(for: transition)
+            if let navController = sourceViewController as? UINavigationController {
+                navController.setViewControllers([destinationViewController], animated: animated) {
+                    completion?(nil)
+                }
+            } else {
+                completion?(RouterError.missingRequiredNavigationController(for: transition))
             }
-            navController.setViewControllers([newViewController], animated: animated)
             
         case .modal:
-            sourceViewController.present(newViewController, animated: animated)
-            
-        case .custom:
-            guard let customTransitionDelegate = customTransitionDelegate else {
-                throw RouterError.missingCustomTransitionDelegate
+            sourceViewController.present(destinationViewController, animated: animated) {
+                completion?(nil)
             }
             
-            customTransitionDelegate.performTransition(to: newViewController,
-                                                       from: sourceViewController,
-                                                       transition: transition,
-                                                       animated: animated)
+        case .custom:
+            if let customTransitionDelegate = customTransitionDelegate {
+                customTransitionDelegate.performTransition(to: destinationViewController,
+                                                           from: sourceViewController,
+                                                           transition: transition,
+                                                           animated: animated,
+                                                           completion: completion)
+            } else {
+                completion?(RouterError.missingCustomTransitionDelegate)
+            }
         }
     }
     
