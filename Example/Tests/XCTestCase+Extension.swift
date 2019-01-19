@@ -11,39 +11,58 @@ import XCTest
 
 extension XCTestCase {
     
-    typealias ErrorHandler = (Error?) -> Void
+    // MARK: - Blocking Helpers
     
-    /// Closure takes in an error handler, which you need to pass
-    func assertErrorHandlerIsTriggered(error expectedError: RouterError,
-                                       timeout: UInt32 = 3,
-                                       _ closure: @escaping (ErrorHandler?) -> Void) {
-        DispatchQueue.global().async {
-            var hasTriggeredErrorHandler = false
-            var timeoutRemaining = timeout
-            
-            let errorHandler = { (actualError: Error?) in
-                hasTriggeredErrorHandler = true
-                
-                guard let actualError = actualError else {
-                    XCTFail("Did not receive an error")
-                    return
-                }
-                
-                // Eh... Check the error messages are the same.
-                XCTAssertEqual(expectedError.localizedDescription, (actualError as? RouterError)?.localizedDescription)
-            }
-            
-            while !hasTriggeredErrorHandler, timeoutRemaining > 0 {
-                DispatchQueue.main.async {
-                    closure(errorHandler)
-                }
-                
-                sleep(1)
-                timeoutRemaining -= 1
-            }
-            
-            XCTFail("Expected error was not triggered before timeout.")
+    /// Navigate
+    @discardableResult
+    internal func navigate<Route: RouteProvider>(_ router: Router<Route>, to route: Route, failOnError: Bool = true) -> Error? {
+        let expectation = self.expectation(description: "Navigate to router")
+        var receivedError: Error?
+        
+        router.navigate(to: route, animated: false) { error in
+            receivedError = error
+            expectation.fulfill()
         }
+        
+        waitForExpectations(timeout: 3, handler: nil)
+        
+        if failOnError, let error = receivedError {
+            XCTFail("Unexpected error occured navigating to route \(route.name): \(error.localizedDescription)")
+        }
+        
+        return receivedError
+    }
+    
+    /// Navigate and expect error
+    func navigateExpectError<Route: RouteProvider>(_ router: Router<Route>, to route: Route, error expectedError: Error) {
+        let actualError = navigate(router, to: route, failOnError: false)
+        XCTAssertEqual(actualError?.localizedDescription, expectedError.localizedDescription)
+    }
+    
+    /// Open URL
+    @discardableResult
+    internal func openURL<Route: RouteProvider>(_ router: Router<Route>, url: URL, failOnError: Bool = true) -> Error? {
+        let expectation = self.expectation(description: "Navigate to URL")
+        var receivedError: Error?
+        
+        router.openURL(url, animated: false) { error in
+            receivedError = error
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 3, handler: nil)
+        
+        if failOnError, let error = receivedError {
+            XCTFail("Unexpected error occured opening URL \(url.absoluteString): \(error.localizedDescription)")
+        }
+        
+        return receivedError
+    }
+    
+    /// Open URL and expect error
+    internal func openURLExpectError<Route: RouteProvider>(_ router: Router<Route>, url: URL, error expectedError: Error) {
+        let actualError = openURL(router, url: url, failOnError: false)
+        XCTAssertEqual(actualError?.localizedDescription, expectedError.localizedDescription)
     }
 
 }

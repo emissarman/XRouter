@@ -101,7 +101,7 @@ class RouterTests: XCTestCase {
     func testURLRouterFailsSilentlyWhenNoRoutesRegistered() {
         let router = MockRouter<TestRoute>(rootViewController: UIViewController())
         
-        try! router.openURL(URL(string: "http://example.com/static/route")!)
+        openURL(router, url: URL(string: "http://example.com/static/route")!)
         XCTAssertNil(router.currentRoute)
     }
     
@@ -143,32 +143,6 @@ class RouterTests: XCTestCase {
         // Test calling a failing/cancelled route does not change the current route
         navigate(router, to: .alwaysFails, failOnError: false)
         XCTAssertEqual(router.currentRoute!, .homeVC)
-    }
-    
-    /// Blocking helper function
-    @discardableResult
-    func navigate<Route: RouteProvider>(_ router: Router<Route>, to route: Route, failOnError: Bool = true) -> Error? {
-        let expectation = self.expectation(description: "Navigate to router")
-        var receivedError: Error?
-        
-        router.navigate(to: route, animated: false) { error in
-            receivedError = error
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 5, handler: nil)
-        
-        if failOnError, let error = receivedError {
-            XCTFail("Unexpected error occured: \(error.localizedDescription)")
-        }
-        
-        return receivedError
-    }
-    
-    /// Blocking helper function
-    func navigateExpectError<Route: RouteProvider>(_ router: Router<Route>, to route: Route, error expectedError: Error) {
-        let actualError = navigate(router, to: route, failOnError: false)
-        XCTAssertEqual(actualError?.localizedDescription, expectedError.localizedDescription)
     }
     
 }

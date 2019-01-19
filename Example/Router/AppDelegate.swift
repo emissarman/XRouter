@@ -69,17 +69,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             guard let url = URL(string: "https://example.com/colors/red") else { return }
             print("Routing to red")
-            _ = try! self.router.openURL(url)
+            self.router.openURL(url)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 guard let url = URL(string: "https://example.com/colors/blue/link") else { return }
                 print("Routing to blue")
-                _ = try! self.router.openURL(url)
+                self.router.openURL(url)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     guard let url = URL(string: "https://example.com/home") else { return }
                     print("Routing to home")
-                    _ = try! self.router.openURL(url)
+                    self.router.openURL(url)
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: completion)
                 }
@@ -93,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             print("Routing to: \(nextRoute.name)")
-            try! self.router.navigate(to: nextRoute)
+            self.router.navigate(to: nextRoute)
             
             // Start next route
             self.navigateToNextRoute(delay: delay)

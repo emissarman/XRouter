@@ -70,20 +70,27 @@ open class Router<Route: RouteProvider> {
     ///
     @discardableResult
     open func openURL(_ url: URL, animated: Bool = true, completion: ((Error?) -> Void)? = nil) -> Bool {
-        guard let urlMatcherGroup = urlMatcherGroup else { return false }
+        var hasMatched = false
         
-        do {
-            for urlMatcher in urlMatcherGroup.matchers {
-                if let route = try urlMatcher.match(url: url) {
-                    navigate(to: route, animated: animated, completion: completion)
-                    return true
+        if let urlMatcherGroup = urlMatcherGroup {
+            do {
+                for urlMatcher in urlMatcherGroup.matchers {
+                    if let route = try urlMatcher.match(url: url) {
+                        navigate(to: route, animated: animated, completion: completion)
+                        hasMatched = true
+                    }
                 }
+            } catch {
+                completion?(error)
+                return false
             }
-        } catch {
-            completion?(error)
         }
         
-        return false
+        if !hasMatched {
+            completion?(nil)
+        }
+        
+        return hasMatched
     }
     
     // MARK: - Implementation
@@ -154,6 +161,8 @@ open class Router<Route: RouteProvider> {
         //  or we're trying to set THIS view controller's navigation controller
         if destinationViewController === sourceViewController
             || destinationViewController === sourceViewController.navigationController {
+            // No error? -- maybe throw an "already here" error
+            completion?(nil)
             return
         }
         

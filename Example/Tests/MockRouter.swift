@@ -18,15 +18,9 @@ class MockRouter<Route: RouteProvider>: Router<Route> {
     
     private let timeout: TimeInterval = 5
     
-    override public var currentTopViewController: UIViewController? {
-        return rootViewController
-    }
-    
-    private var rootViewController: UIViewController?
-    
     convenience init(rootViewController: UIViewController? = UIApplication.shared.rootViewController) {
+        UIApplication.shared.keyWindow?.rootViewController = rootViewController
         self.init()
-        self.rootViewController = rootViewController
     }
     
     /// Sets the `currentRoute` when `super.navigate(to:animated)` doesn't return an error

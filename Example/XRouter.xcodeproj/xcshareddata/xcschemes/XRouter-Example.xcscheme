@@ -63,6 +63,16 @@
                ReferencedContainer = "container:XRouter.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2968297921F2CC1E00CB0954"
+               BuildableName = "XRouter_UITests.xctest"
+               BlueprintName = "XRouter_UITests"
+               ReferencedContainer = "container:XRouter.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

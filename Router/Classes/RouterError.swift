@@ -45,6 +45,7 @@ extension RouterError: LocalizedError {
         case .missingSourceViewController:
             return """
             The source view controller (AKA current top view controller) was unexpectedly `nil`.
+            This could be because the top view controller is an empty navigation controller.
             """
         case .missingRequiredNavigationController(let transition):
             return """
