@@ -23,7 +23,10 @@ A simple routing library for iOS projects.
 let router = Router<MyRoutes>()
 
 // Navigate to a route
-try? router.navigate(to: .loginFlow)
+router.navigate(to: .loginFlow)
+
+// ... or open a route from a URL
+router.openURL(url)
 ```
 
 #### Configuring Routes
@@ -126,7 +129,7 @@ extension AppDelegate {
     {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
             let url = userActivity.webpageURL,
-            let handledURL = try? router.openURL(url)  else {
+            let handledURL = router.openURL(url) else {
             return false // Unrecognized URL
         }
 
@@ -136,28 +139,48 @@ extension AppDelegate {
 }
 ```
 
-#### Wrapping Try/Catch
+#### Handling errors
 
-It can be messy trying to manage do/catch blocks in your app, and it is important to handle errors.
+It can be messy trying to handle errors in every place you call navigate.
 
-It is highly recommended to wrap the navigate function if you handle
-all navigation errors in the same way. For example, something like this:
+You can set a completion handler for a navigation action:
+
 ```swift
-extension BaseCoordinator {
+router.navigate(to: .profilePage(id: "12")) { optionalError in
+    if let error = optionalError {
+        print("Oh no, there was an unexpected error!")
+    } else {
+        print("Success!")
+    }
+}
+```
 
-    /// Open the route, or report an error
-    @discardableResult func navigate(to: Route) -> Bool {
-        do {
-            try router.navigate(to: route, animated: true)
-            return true
-        } catch {
-            // Handle error here! Log, etc.
-            assertionFailure("An error occured while navigating to \(route.name). Error: \(error)")
-            return false
-        }
+You could wrap or override the navigate functions to provide a default completion handler, if you handle
+all navigation errors in the same way. For example, something like this:
+
+```swift
+class MyRouter<Route: RouteProvider>: XRouter.Router<Route> {
+
+    /// Navigate to a route. Logs errors.
+    override func navigate(to route: Route, animated: Bool = true, completion: ((Error?) -> Void)? = nil) {
+        super.navigate(to: route, animated: animated, completion: completion ?? logErrors)
+    }
+
+    /// Open a URL to a route. Logs errors.
+    @discardableResult
+    override func openURL(_ url: URL, animated: Bool = true, completion: ((Error?) -> Void)? = nil) -> Bool {
+        return openURL(url, animated: animated, completion: completion ?? logErrors)
+    }
+
+    /// Completion handler for `navigate(...)`/`openURL(...)`.
+    private func logErrors(_ error: Error?) {
+        guard let error = error else { return }
+
+        // Log errors here
     }
 
 }
+
 ```
 
 #### Custom Transitions
