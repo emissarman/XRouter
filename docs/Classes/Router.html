@@ -210,9 +210,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7XRouter6RouterC8navigate2to8animatedyx_SbtKF"></a>
-                    <a name="//apple_ref/swift/Method/navigate(to:animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7XRouter6RouterC8navigate2to8animatedyx_SbtKF">navigate(to:animated:)</a>
+                    <a name="/s:7XRouter6RouterC8navigate2to8animated10completionyx_Sbys5Error_pSgcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/navigate(to:animated:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter6RouterC8navigate2to8animated10completionyx_Sbys5Error_pSgcSgtF">navigate(to:animated:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -223,8 +223,8 @@
                         <p>Navigate to a route.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
-    Has no effect if routing to the view controller/navigation controller you are already on,
-     where the view controller is provided by <code>RouteProvider(_:).prepareForTransition(...)</code>
+    Has no effect if the destination view controller is the view controller or navigation controller
+    you are presently on - as provided by <code>RouteProvider(_:).prepareForTransition(...)</code>.
 
 </div>
 
@@ -233,7 +233,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">navigate</span><span class="p">(</span><span class="n">to</span> <span class="nv">route</span><span class="p">:</span> <span class="kt">Route</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">navigate</span><span class="p">(</span><span class="n">to</span> <span class="nv">route</span><span class="p">:</span> <span class="kt">Route</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">((</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -243,9 +243,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7XRouter6RouterC7openURLySb10Foundation0D0VKF"></a>
-                    <a name="//apple_ref/swift/Method/openURL(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7XRouter6RouterC7openURLySb10Foundation0D0VKF">openURL(_:)</a>
+                    <a name="/s:7XRouter6RouterC7openURL_8animated10completionSb10Foundation0D0V_Sbys5Error_pSgcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/openURL(_:animated:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter6RouterC7openURL_8animated10completionSb10Foundation0D0V_Sbys5Error_pSgcSgtF">openURL(_:animated:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -267,7 +267,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">open</span> <span class="kd">func</span> <span class="nf">openURL</span><span class="p">(</span><span class="n">_</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">openURL</span><span class="p">(</span><span class="n">_</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">((</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
