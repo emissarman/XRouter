@@ -27,7 +27,9 @@ internal extension UIViewController {
     ///
     internal func hasAncestor(_ viewController: UIViewController) -> Bool {
         if let ancestor = getNextAncestor() {
-            return ancestor === viewController || ancestor.hasChild(viewController) || ancestor.hasAncestor(viewController)
+            return ancestor === viewController
+                || ancestor.hasChild(viewController)
+                || ancestor.hasAncestor(viewController)
         }
         
         return false

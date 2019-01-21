@@ -19,10 +19,12 @@ class RouterErrorTests: XCTestCase {
     func testErrorFormatting() {
         let mockTransition: RouteTransition = .push
         
+        assertExpectedFormat(for: .missingSourceViewController)
         assertExpectedFormat(for: .missingRequiredNavigationController(for: mockTransition))
         assertExpectedFormat(for: .unableToFindRouteToViewController)
         assertExpectedFormat(for: .missingRequiredParameterWhileUnwrappingURLRoute(parameter: "test"))
         assertExpectedFormat(for: .requiredIntegerParameterWasNotAnInteger(parameter: "test", stringValue: "test"))
+        assertExpectedFormat(for: .missingCustomTransitionDelegate)
     }
     
     private func assertExpectedFormat(for error: RouterError) {

@@ -14,24 +14,24 @@ public enum RouterError {
     
     // MARK: - Errors
     
-    /// There is currently no top view controller on the navigation stack
-    /// - Note: This really won't ever occur, unless you are doing something super bizarre with the `UIWindow(_:).rootViewController`.
-    case missingSourceViewController
+    /// Used a custom transition but no custom transition delegate was set
+    case missingCustomTransitionDelegate
     
     /// The route transition can only be called from a UINavigationController
     case missingRequiredNavigationController(for: RouteTransition)
     
-    /// The view controller was in the hierachy but was not an ancestor of the current view controller, so we were unable to automatically find a route to it.
-    case unableToFindRouteToViewController
-    
     /// Missing required parameter while unwrapping URL route
     case missingRequiredParameterWhileUnwrappingURLRoute(parameter: String)
+    
+    /// There is currently no top view controller on the navigation stack
+    /// - Note: This really won't ever occur, unless you are doing something super bizarre with the `UIWindow(_:).rootViewController`.
+    case missingSourceViewController
     
     /// A required parameter was found, but it was not an Int
     case requiredIntegerParameterWasNotAnInteger(parameter: String, stringValue: String)
     
-    /// Used a custom transition but no custom transition delegate was set
-    case missingCustomTransitionDelegate
+    /// The view controller was in the hierachy but was not an ancestor of the current view controller, so we were unable to automatically find a route to it.
+    case unableToFindRouteToViewController
     
 }
 
@@ -42,31 +42,31 @@ extension RouterError: LocalizedError {
     /// A localized message describing what error occurred.
     public var errorDescription: String? {
         switch self {
-        case .missingSourceViewController:
+        case .missingCustomTransitionDelegate:
             return """
-            The source view controller (AKA current top view controller) was unexpectedly `nil`.
-            This could be because the top view controller is an empty navigation controller.
+            Attempted to use a custom transition, but `customTransitionDelegate` was set to `nil`.
             """
         case .missingRequiredNavigationController(let transition):
             return """
             You cannot navigate to this route using transition \"\(transition.name)\" without a navigation controller.
             """
-        case .unableToFindRouteToViewController:
-            return """
-            The view controller was in the hierachy but was not an ancestor of the current view controller, so we were unable to automatically find a route to it.
-            """
         case .missingRequiredParameterWhileUnwrappingURLRoute(let name):
             return """
             Missing required paramter \"\(name)\" while unwrapping URL route.
+            """
+        case .missingSourceViewController:
+            return """
+            The source view controller (AKA current top view controller) was unexpectedly `nil`.
+            This could be because the top view controller is an empty navigation controller.
             """
         case .requiredIntegerParameterWasNotAnInteger(let name, let stringValue):
             return """
             Required integer parameter \"\(name)\" existed, but was not an integer.
             Instead \"\(stringValue)\" was received."
             """
-        case .missingCustomTransitionDelegate:
+        case .unableToFindRouteToViewController:
             return """
-            Attempted to use a custom transition, but `customTransitionDelegate` was set to `nil`.
+            The view controller was in the hierachy but was not an ancestor of the current view controller, so we were unable to automatically find a route to it.
             """
         }
     }
@@ -74,31 +74,31 @@ extension RouterError: LocalizedError {
     /// A localized message describing how one might recover from the failure.
     public var recoverySuggestion: String? {
         switch self {
-        case .missingSourceViewController:
+        case .missingCustomTransitionDelegate:
             return """
-            Something unexpected has happened and the source view controller was not able to be located.
+            Set `customTransitionDelegate` when using `RouteTransition.custom(_:)`.
             """
         case .missingRequiredNavigationController:
             return """
             Nest the parent view controller in a `UINavigationController`.
-            """
-        case .unableToFindRouteToViewController:
-            return """
-            Something funky has occured.
-            Please log an issue at: https://github.com/reececomo/XRouter
             """
         case .missingRequiredParameterWhileUnwrappingURLRoute(let name):
             return """
             You referenced a parameter \"\(name)\" that wasn't declared in the `PathPattern`.
             Please include the parameter in `PathPattern`, or remove it from the mapping.
             """
+        case .missingSourceViewController:
+            return """
+            Something unexpected has happened and the source view controller was not able to be located.
+            """
         case .requiredIntegerParameterWasNotAnInteger(_, let stringValue):
             return """
             The value that was received was \"\(stringValue)\", which could not be cast to `Int`.
             """
-        case .missingCustomTransitionDelegate:
+        case .unableToFindRouteToViewController:
             return """
-            Set `customTransitionDelegate` when using `RouteTransition.custom(_:)`.
+            Something funky has occured.
+            Please log an issue at: https://github.com/reececomo/XRouter
             """
         }
     }

@@ -13,6 +13,9 @@
 		2964226921E0AE1100C6D888 /* ColoredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2964226821E0AE1100C6D888 /* ColoredViewController.swift */; };
 		2964227121E0DBC100C6D888 /* ExampleFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2964227021E0DBC100C6D888 /* ExampleFlowController.swift */; };
 		2968297D21F2CC1E00CB0954 /* UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2968297C21F2CC1E00CB0954 /* UITests.swift */; };
+		2995529321F61BF6008B68ED /* UIApplicationExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2995529221F61BF6008B68ED /* UIApplicationExtensionTests.swift */; };
+		2995529521F61D95008B68ED /* PathPatternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2995529421F61D95008B68ED /* PathPatternTests.swift */; };
+		2995529721F62984008B68ED /* FailingMockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2995529621F62984008B68ED /* FailingMockRouter.swift */; };
 		299DE38521EEF2F90030AFBC /* XCTestCase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 299DE38421EEF2F90030AFBC /* XCTestCase+Extension.swift */; };
 		29C58C7021E323F700CC7CD2 /* RouteTransitionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C58C6E21E323EC00CC7CD2 /* RouteTransitionTests.swift */; };
 		29C58C7321E3258B00CC7CD2 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C58C7121E3258000CC7CD2 /* RouterTests.swift */; };
@@ -54,6 +57,9 @@
 		2968297A21F2CC1E00CB0954 /* XRouter_UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XRouter_UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2968297C21F2CC1E00CB0954 /* UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITests.swift; sourceTree = "<group>"; };
 		2968297E21F2CC1E00CB0954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2995529221F61BF6008B68ED /* UIApplicationExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtensionTests.swift; sourceTree = "<group>"; };
+		2995529421F61D95008B68ED /* PathPatternTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathPatternTests.swift; sourceTree = "<group>"; };
+		2995529621F62984008B68ED /* FailingMockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailingMockRouter.swift; sourceTree = "<group>"; };
 		299DE38421EEF2F90030AFBC /* XCTestCase+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Extension.swift"; sourceTree = "<group>"; };
 		29C58C6E21E323EC00CC7CD2 /* RouteTransitionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTransitionTests.swift; sourceTree = "<group>"; };
 		29C58C7121E3258000CC7CD2 /* RouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterTests.swift; sourceTree = "<group>"; };
@@ -187,15 +193,18 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				2995529421F61D95008B68ED /* PathPatternTests.swift */,
+				29C58C8221E3B48800CC7CD2 /* UIViewControllerExtensionTests.swift */,
+				2995529221F61BF6008B68ED /* UIApplicationExtensionTests.swift */,
 				29C58C6E21E323EC00CC7CD2 /* RouteTransitionTests.swift */,
 				29C58C7121E3258000CC7CD2 /* RouterTests.swift */,
 				29209BFC21E9CABD00DBCE22 /* RouterURLMatcherTests.swift */,
 				29C58C7421E3351400CC7CD2 /* RouteProviderTests.swift */,
 				29C58C7F21E3AE8E00CC7CD2 /* RouterErrorTests.swift */,
-				29C58C8221E3B48800CC7CD2 /* UIViewControllerExtensionTests.swift */,
 				29209BFF21E9CB0400DBCE22 /* MockRouter.swift */,
-				607FACE91AFB9204008FA782 /* Supporting Files */,
+				2995529621F62984008B68ED /* FailingMockRouter.swift */,
 				299DE38421EEF2F90030AFBC /* XCTestCase+Extension.swift */,
+				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -445,8 +454,11 @@
 				29C58C8421E3B49100CC7CD2 /* UIViewControllerExtensionTests.swift in Sources */,
 				29209BFE21E9CACF00DBCE22 /* RouterURLMatcherTests.swift in Sources */,
 				29C58C7821E3373D00CC7CD2 /* RouteProviderTests.swift in Sources */,
+				2995529521F61D95008B68ED /* PathPatternTests.swift in Sources */,
+				2995529721F62984008B68ED /* FailingMockRouter.swift in Sources */,
 				29C58C7021E323F700CC7CD2 /* RouteTransitionTests.swift in Sources */,
 				299DE38521EEF2F90030AFBC /* XCTestCase+Extension.swift in Sources */,
+				2995529321F61BF6008B68ED /* UIApplicationExtensionTests.swift in Sources */,
 				29C58C7321E3258B00CC7CD2 /* RouterTests.swift in Sources */,
 				29209C0121E9CB8200DBCE22 /* MockRouter.swift in Sources */,
 				29C58C8121E3AEAE00CC7CD2 /* RouterErrorTests.swift in Sources */,

@@ -70,9 +70,9 @@ public class PathPattern: ExpressibleByStringLiteral, Hashable {
                 .replacingOccurrences(of: "{", with: "")
                 .replacingOccurrences(of: "}", with: "")
             return .parameter(named: parameterName)
-        } else {
-            return .exact(string: string)
         }
+        
+        return .exact(string: string)
     }
     
 }

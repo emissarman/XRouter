@@ -16,8 +16,6 @@ class MockRouter<Route: RouteProvider>: Router<Route> {
     
     private(set) var currentRoute: Route?
     
-    private let timeout: TimeInterval = 5
-    
     convenience init(rootViewController: UIViewController? = UIApplication.shared.rootViewController) {
         UIApplication.shared.keyWindow?.rootViewController = rootViewController
         self.init()

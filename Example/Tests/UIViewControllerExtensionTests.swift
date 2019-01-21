@@ -11,7 +11,7 @@ import UIKit
 @testable import XRouter
 
 /**
- RouteProvider Tests
+ UIViewController Extension Tests
  */
 class UIViewControllerExtensionTests: XCTestCase {
     

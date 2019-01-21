@@ -46,14 +46,8 @@ open class Router<Route: RouteProvider> {
     ///         you are presently on - as provided by `RouteProvider(_:).prepareForTransition(...)`.
     ///
     open func navigate(to route: Route, animated: Bool = true, completion: ((Error?) -> Void)? = nil) {
-        prepareForNavigation(to: route, animated: animated, successHandler: { destinationViewController in
-            guard let sourceViewController = self.currentTopViewController else {
-                completion?(RouterError.missingSourceViewController)
-                return
-            }
-            
-            self.performNavigation(to: destinationViewController,
-                                   from: sourceViewController,
+        prepareForNavigation(to: route, animated: animated, successHandler: { viewController in
+            self.performNavigation(to: viewController,
                                    with: route.transition,
                                    animated: animated,
                                    completion: completion)
@@ -70,27 +64,18 @@ open class Router<Route: RouteProvider> {
     ///
     @discardableResult
     open func openURL(_ url: URL, animated: Bool = true, completion: ((Error?) -> Void)? = nil) -> Bool {
-        var hasMatched = false
-        
-        if let urlMatcherGroup = urlMatcherGroup {
-            do {
-                for urlMatcher in urlMatcherGroup.matchers {
-                    if let route = try urlMatcher.match(url: url) {
-                        navigate(to: route, animated: animated, completion: completion)
-                        hasMatched = true
-                    }
-                }
-            } catch {
-                completion?(error)
-                return false
+        do {
+            if let route = try findMatchingRoute(for: url) {
+                navigate(to: route, animated: animated, completion: completion)
+                return true
+            } else {
+                completion?(nil) // No matching route.
             }
+        } catch {
+            completion?(error) // There was an error.
         }
         
-        if !hasMatched {
-            completion?(nil)
-        }
-        
-        return hasMatched
+        return false
     }
     
     // MARK: - Implementation
@@ -153,10 +138,15 @@ open class Router<Route: RouteProvider> {
     
     /// Perform navigation
     private func performNavigation(to destinationViewController: UIViewController,
-                                   from sourceViewController: UIViewController,
                                    with transition: RouteTransition,
                                    animated: Bool,
                                    completion: ((Error?) -> Void)?) {
+        // Sanity check, make sure we're coming from somewhere.
+        guard var sourceViewController = currentTopViewController else {
+            completion?(RouterError.missingSourceViewController)
+            return
+        }
+        
         // Sanity check, don't navigate if we're already here,
         //  or we're trying to set THIS view controller's navigation controller
         if destinationViewController === sourceViewController
@@ -169,7 +159,7 @@ open class Router<Route: RouteProvider> {
         // The source view controller will be the navigation controller where
         //  possible - but will otherwise default to the current view controller
         //  i.e. for "present" transitions.
-        let sourceViewController = sourceViewController.navigationController ?? sourceViewController
+        sourceViewController = sourceViewController.navigationController ?? sourceViewController
         
         switch transition {
         case .push:
@@ -207,6 +197,24 @@ open class Router<Route: RouteProvider> {
                 completion?(RouterError.missingCustomTransitionDelegate)
             }
         }
+    }
+    
+    ///
+    /// Find a matching Route for a URL.
+    ///
+    /// - Note: This method throws an error when the route is mapped
+    ///         but the mapping fails.
+    ///
+    private func findMatchingRoute(for url: URL) throws -> Route? {
+        if let urlMatcherGroup = urlMatcherGroup {
+            for urlMatcher in urlMatcherGroup.matchers {
+                if let route = try urlMatcher.match(url: url) {
+                    return route
+                }
+            }
+        }
+        
+        return nil
     }
     
 }

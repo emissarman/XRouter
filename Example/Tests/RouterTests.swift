@@ -33,6 +33,15 @@ class RouterTests: XCTestCase {
         assertRoutingPathsWork(using: router)
     }
     
+    /// Set view controller fail when no nav controller
+    func testMissingRequiredNavigationController() {
+        let router = MockRouter<TestRoute>(rootViewController: UIViewController())
+        
+        // You shouldn't be able to call the set transition from a single modal vc.
+        navigate(router, to: .singleModalVC)
+        navigateExpectError(router, to: .secondHomeVC, error: RouterError.missingRequiredNavigationController(for: .set))
+    }
+    
     /// Test routing works as expected when the root view controller is a tab bar controller
     func testRoutingWithUITabBarController() {
         // Create initial navigation stack
@@ -103,6 +112,12 @@ class RouterTests: XCTestCase {
         
         openURL(router, url: URL(string: "http://example.com/static/route")!)
         XCTAssertNil(router.currentRoute)
+    }
+    
+    /// Test missing source view controller
+    func testMissingSourceViewController() {
+        let router = FailingMockRouter<TestRoute>(rootViewController: UIViewController())
+        navigateExpectError(router, to: .homeVC, error: RouterError.missingSourceViewController)
     }
     
     //
