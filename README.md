@@ -3,8 +3,8 @@
 A simple routing library for iOS projects.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d0ef88b70fc843adb2944ce0d956269d)](https://app.codacy.com/app/hubrioau/XRouter?utm_source=github.com&utm_medium=referral&utm_content=hubrioau/XRouter&utm_campaign=Badge_Grade_Dashboard)
-[![CodeCov Badge](https://codecov.io/gh/hubrioau/XRouter/branch/master/graph/badge.svg)](https://codecov.io/gh/hubrioau/XRouter)
-[![Build Status](https://travis-ci.org/hubrioau/XRouter.svg?branch=master)](https://travis-ci.org/hubrioau/XRouter)
+[![CodeCov Badge](https://codecov.io/gh/reececomo/XRouter/branch/master/graph/badge.svg)](https://codecov.io/gh/hubrioau/XRouter)
+[![Build Status](https://travis-ci.org/reececomo/XRouter.svg?branch=master)](https://travis-ci.org/hubrioau/XRouter)
 [![Docs Badge](https://raw.githubusercontent.com/hubrioau/XRouter/master/docs/badge.svg?sanitize=true)](https://hubrioau.github.io/XRouter)
 [![Version](https://img.shields.io/cocoapods/v/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
 [![License](https://img.shields.io/cocoapods/l/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
