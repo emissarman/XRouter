@@ -16,7 +16,7 @@ import UIKit
 /**
  Router Tests
  */
-class RouterTests: XCTestCase {
+class RouterTests: ReactiveTestCase {
     
     /// For making sure our custom error is thrown
     static let routeProviderMockErrorCode = 12345
@@ -134,7 +134,8 @@ class RouterTests: XCTestCase {
         XCTAssertEqual(router.currentRoute!, .homeVC)
         XCTAssertEqual(router.currentRoute!.transition, .set)
         
-        navigate(router, to: .settingsVC)
+        // Test RxSwift extension
+        rxNavigate(router, to: .settingsVC)
         XCTAssertEqual(router.currentRoute!, .settingsVC)
         XCTAssertEqual(router.currentRoute!.transition, .push)
         
@@ -144,6 +145,9 @@ class RouterTests: XCTestCase {
         
         // Missing custom navigation delegate
         navigateExpectError(router, to: .customTransitionVC, error: RouterError.missingCustomTransitionDelegate)
+        
+        // Test RxSwift fails too
+        rxNavigateExpectError(router, to: .customTransitionVC, error: RouterError.missingCustomTransitionDelegate)
         
         // Lets navigate now to a second popover modal before moving back to .home
         navigate(router, to: .nestedModalGroup)

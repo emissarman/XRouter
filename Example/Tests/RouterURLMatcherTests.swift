@@ -16,7 +16,7 @@ import UIKit
 /**
  Router Tests
  */
-class RouterURLMatcherTests: XCTestCase {
+class RouterURLMatcherTests: ReactiveTestCase {
     
     /// Test static routes
     func testURLRouterCanMapStaticRoutes() {
@@ -126,6 +126,14 @@ class RouterURLMatcherTests: XCTestCase {
         } else {
             XCTFail("Was expecting name to equal tortoise")
         }
+        
+        // Test RxSwift extension works too
+        rxOpenURL(router, url: URL(string: "http://example.com/some/other-qs/route?name=tortoise")!)
+        if case let TestRoute.exampleQueryStringRoute2(name) = router.currentRoute! {
+            XCTAssertEqual(name, "tortoise")
+        } else {
+            XCTFail("Was expecting name to equal tortoise")
+        }
     }
     
     /// Test dynamic string routes
@@ -140,6 +148,19 @@ class RouterURLMatcherTests: XCTestCase {
         let router = MockRouter<TestRoute>(rootViewController: UINavigationController(rootViewController: UIViewController()))
         openURLExpectError(router, url: URL(string: "http://example.com/dynamic/int/three")!,
                            error: RouterError.requiredIntegerParameterWasNotAnInteger(parameter: "id", stringValue: "three"))
+        
+        // Test RxSwift extension works too
+        rxOpenURLExpectError(router, url: URL(string: "http://example.com/dynamic/int/three")!,
+                           error: RouterError.requiredIntegerParameterWasNotAnInteger(parameter: "id", stringValue: "three"))
+    }
+    
+    /// Test rx.openURL captures an error thrown during transition
+    func testReactiveExtensionCatchesErrors() {
+        let router = MockRouter<TestRoute>()
+        
+        // Test RxSwift extension works too
+        rxOpenURLExpectError(router, url: URL(string: "http://example.com/failing")!,
+                             error: RouterError.missingCustomTransitionDelegate)
     }
     
 }
@@ -164,6 +185,9 @@ private enum TestRoute: RouteProvider {
     /// Wildcard route
     case exampleQueryStringRoute2(name: String)
     
+    /// Route that fails during routing
+    case failingRoute
+    
     var transition: RouteTransition {
         return .push
     }
@@ -185,6 +209,11 @@ private enum TestRoute: RouteProvider {
             viewController.title = "id:\(identifier)"
             return viewController
             
+        case .failingRoute:
+            // Trigger any error here
+            // We're just using `missingCustomTransitionDelegate` for simplicity.
+            throw RouterError.missingCustomTransitionDelegate
+            
         default:
             return UIViewController()
         }
@@ -200,6 +229,7 @@ private enum TestRoute: RouteProvider {
                 $0.map("some-qs/route") { .exampleQueryStringRoute(page: $0.query("page") ?? 0) }
                 $0.map("some/other-qs/route") { .exampleQueryStringRoute2(name: $0.query("name") ?? "") }
                 $0.map("route/missing/param") { try .exampleStringDynamicRoute(named: $0.param("whoops")) }
+                $0.map("failing") { .failingRoute }
             },
             .group(["second-website.com",
                     "third.website.net.au"]
