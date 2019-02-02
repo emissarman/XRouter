@@ -2,10 +2,10 @@
 
 A simple routing library for iOS projects.
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d0ef88b70fc843adb2944ce0d956269d)](https://app.codacy.com/app/hubrioau/XRouter?utm_source=github.com&utm_medium=referral&utm_content=hubrioau/XRouter&utm_campaign=Badge_Grade_Dashboard)
-[![CodeCov Badge](https://codecov.io/gh/reececomo/XRouter/branch/master/graph/badge.svg)](https://codecov.io/gh/hubrioau/XRouter)
-[![Build Status](https://travis-ci.org/reececomo/XRouter.svg?branch=master)](https://travis-ci.org/hubrioau/XRouter)
-[![Docs Badge](https://raw.githubusercontent.com/hubrioau/XRouter/master/docs/badge.svg?sanitize=true)](https://hubrioau.github.io/XRouter)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d0ef88b70fc843adb2944ce0d956269d)](https://app.codacy.com/app/hubrioAU/XRouter?utm_source=github.com&utm_medium=referral&utm_content=hubrioAU/XRouter&utm_campaign=Badge_Grade_Dashboard)
+[![CodeCov Badge](https://codecov.io/gh/hubrioAU/XRouter/branch/master/graph/badge.svg)](https://codecov.io/gh/hubrioau/XRouter)
+[![Build Status](https://travis-ci.org/hubrioAU/XRouter.svg?branch=master)](https://travis-ci.org/hubrioAU/XRouter)
+[![Docs Badge](https://raw.githubusercontent.com/hubrioAU/XRouter/master/docs/badge.svg?sanitize=true)](https://hubrioau.github.io/XRouter)
 [![Version](https://img.shields.io/cocoapods/v/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
 [![License](https://img.shields.io/cocoapods/l/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
 [![Platform](https://img.shields.io/cocoapods/p/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
@@ -60,7 +60,7 @@ extension AppRoute: RouteProvider {
     /// Prepare the view controller for the route
     /// - You can use this to configure entry points into flow coordinators
     /// - You can throw errors here to cancel the navigation
-    func prepareForTransition(from currentViewController: UIViewController) throws {
+    func prepareForTransition(from sourceViewController: UIViewController) throws -> UIViewController {
         switch self {
         case .home:
             return HomeCoordinator.shared.navigationController
@@ -213,14 +213,15 @@ Implement the delegate method `performTransition(...)`:
 extension AppDelegate: RouterCustomTransitionDelegate {
     
     /// Perform a custom transition
-    func performTransition(to newViewController: UIViewController,
-                           from oldViewController: UIViewController,
+    func performTransition(to destViewController: UIViewController,
+                           from sourceViewController: UIViewController,
                            transition: RouteTransition,
-                           animated: Bool) {
+                           animated: Bool,
+                           completion: ((Error?) -> Void)?) {
         if transition == .myHeroFade {
-            oldViewController.hero.isEnabled = true
-            newViewController.hero.isEnabled = true
-            newViewController.hero.modalAnimationType = .fade
+            sourceViewController.hero.isEnabled = true
+            destViewController.hero.isEnabled = true
+            destViewController.hero.modalAnimationType = .fade
             
             // Creates a container nav stack
             let containerNavController = UINavigationController()
@@ -228,7 +229,11 @@ extension AppDelegate: RouterCustomTransitionDelegate {
             containerNavController.setViewControllers([newViewController], animated: false)
             
             // Present the hero animation
-            oldViewController.present(containerNavController, animated: animated)
+            sourceViewController.present(containerNavController, animated: animated) {
+                completion?(nil)
+            }
+        } else {
+            completion?(nil)
         }
     }
     
