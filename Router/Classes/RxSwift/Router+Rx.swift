@@ -3,7 +3,7 @@
 //  XRouter
 //
 
-//#if canImport(RxSwift)
+#if canImport(RxSwift)
 
 import RxSwift
 
@@ -65,4 +65,4 @@ extension Reactive {
     
 }
 
-//#endif
+#endif
