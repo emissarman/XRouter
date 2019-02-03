@@ -598,7 +598,8 @@
 				D3D74F50319B2AA4B9EBD24007562345 /* Router+URLMatcherGroup.swift */,
 				2CD185BFDC9FA85BB8B677A70A1BA967 /* Router+URLPathMapper.swift */,
 			);
-			path = URLMatcher;
+			name = URLMatcher;
+			path = Router/Classes/URLMatcher;
 			sourceTree = "<group>";
 		};
 		4200954CD5C02B5F17AAF0FB92FE40F0 /* Development Pods */ = {
