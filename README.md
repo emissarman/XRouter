@@ -1,6 +1,6 @@
 # XRouter
 
-A simple routing library for iOS projects. Compatible with RxSwift.
+A simple routing library for iOS projects.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d0ef88b70fc843adb2944ce0d956269d)](https://app.codacy.com/app/hubrioAU/XRouter?utm_source=github.com&utm_medium=referral&utm_content=hubrioAU/XRouter&utm_campaign=Badge_Grade_Dashboard)
 [![CodeCov Badge](https://codecov.io/gh/hubrioAU/XRouter/branch/master/graph/badge.svg)](https://codecov.io/gh/hubrioau/XRouter)
@@ -73,11 +73,11 @@ extension AppRoute: RouteProvider {
 }
 ```
 
-### RxSwift Implementation
+### RxSwift Support
 XRouter also implements reactive bindings for the RxSwift framework. Bindings exist for the `navigate(to:)` method, which returns a `Completable` event, as well as the `openURL(_:)` method, which returns a `Single<Bool>` event (indicating whether or not the url was handled).
 ```swift
-router.rx.navigate(to: .loginFlow)
-router.rx.openURL(url)
+router.rx.navigate(to: .loginFlow) // -> Completable
+router.rx.openURL(url) // -> Single<Bool>
 ```
 
 ### Advanced Usage
