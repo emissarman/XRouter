@@ -10,7 +10,8 @@ internal extension UITabBarController {
     /// Switch to the tab containing some some descendent view controller.
     internal func switchToTabIfNeeded(for descendantViewController: UIViewController) {
         if let newTabViewController = tabViewController(for: descendantViewController),
-            selectedViewController !== newTabViewController {
+            selectedViewController !== newTabViewController,
+            delegate?.tabBarController?(self, shouldSelect: newTabViewController) ?? true {
             selectedViewController = newTabViewController
         }
     }

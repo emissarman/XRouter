@@ -15,9 +15,27 @@ class UITests: XCTestCase {
         XCUIApplication().launch()
     }
 
-    /// The interface runs itself
     func testRoutes() {
-        sleep(10)
+        let app = XCUIApplication()
+        app.buttons["Open \"Cameron\""].tap()
+        app.buttons["Present Modal"].tap()
+        app.buttons["Push View Controller"].tap()
+        app.buttons["Go straight to second tab"].tap()
+        
+        wait()
+        app.buttons["Push View Controller"].tap()
+        app.buttons["Reset Stack"].tap()
+        wait()
+        
+        let tabBarsQuery = app.tabBars
+        tabBarsQuery.buttons["Tab 1"].tap()
+        tabBarsQuery.buttons["Tab 2"].tap()
+        
     }
-
+    
+    /// Pause for a moment
+    private func wait() {
+        sleep(1)
+    }
+    
 }
