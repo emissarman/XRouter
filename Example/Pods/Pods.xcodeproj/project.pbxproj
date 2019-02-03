@@ -585,6 +585,7 @@
 				13853D60AEA92C9C87AC3C077CDF1E43 /* UIViewController+Extension.swift */,
 			);
 			name = Extensions;
+			path = Router/Classes/Extensions;
 			sourceTree = "<group>";
 		};
 		295728CD220686E9006B4EA4 /* URLMatcher */ = {
@@ -597,7 +598,7 @@
 				D3D74F50319B2AA4B9EBD24007562345 /* Router+URLMatcherGroup.swift */,
 				2CD185BFDC9FA85BB8B677A70A1BA967 /* Router+URLPathMapper.swift */,
 			);
-			name = URLMatcher;
+			path = URLMatcher;
 			sourceTree = "<group>";
 		};
 		4200954CD5C02B5F17AAF0FB92FE40F0 /* Development Pods */ = {
