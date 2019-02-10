@@ -28,6 +28,9 @@ public enum RouterError {
     /// A required parameter was found, but it was not an Int
     case requiredIntegerParameterWasNotAnInteger(parameter: String, stringValue: String)
     
+    /// No view controller has been configured
+    case routeHasNotBeenConfigured
+    
 }
 
 extension RouterError: LocalizedError {
@@ -52,12 +55,17 @@ extension RouterError: LocalizedError {
         case .missingSourceViewController:
             return """
             The source view controller (AKA current top view controller) was unexpectedly `nil`.
-            This could be because the top view controller is an empty navigation controller.
+            This could be because the top view controller is an empty navigation controller, or
+            if the window, or window's root view controller is `nil`.
             """
         case .requiredIntegerParameterWasNotAnInteger(let name, let stringValue):
             return """
             Required integer parameter \"\(name)\" existed, but was not an integer.
             Instead \"\(stringValue)\" was received."
+            """
+        case .routeHasNotBeenConfigured:
+            return """
+            Attempted to navigate to a route, but no route was configured.
             """
         }
     }
@@ -85,6 +93,11 @@ extension RouterError: LocalizedError {
         case .requiredIntegerParameterWasNotAnInteger(_, let stringValue):
             return """
             The value that was received was \"\(stringValue)\", which could not be cast to `Int`.
+            """
+        case .routeHasNotBeenConfigured:
+            return """
+            Configure view controllers for your routes by overriding `prepareForNavigation(to:)` in your Router,
+            or by implementing a `RoutingHandler`.
             """
         }
     }
