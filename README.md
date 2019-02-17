@@ -196,6 +196,7 @@ extension Router: RouterCustomTransitionDelegate {
         guard transition == .heroCrossFade else {
             assertionFailed("Unhandled custom transition \(transition.name)")
             completion?(nil)
+            return
         }
         
         sourceViewController.hero.isEnabled = true
