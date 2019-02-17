@@ -30,8 +30,6 @@ enum Route: RouteType {
 ```swift
 class Router: XRouter<Route> {
 
-    /* ... */
-
     /// Configure the destination view controller for the route
     override func prepareForTransition(to route: Route) throws -> UIViewController {
         switch route {
@@ -49,9 +47,6 @@ class Router: XRouter<Route> {
 
 #### Using a Router
 ```swift
-// Create a router
-let router = Router()
-
 // Navigate to a route
 router.navigate(to: .loginFlow)
 
@@ -59,18 +54,18 @@ router.navigate(to: .loginFlow)
 router.openURL(url)
 ```
 
-### RxSwift Support
-XRouter also implements reactive bindings for the RxSwift framework. Bindings exist for `navigate(to:)`, which returns a `Completable`, and `openURL(_:)`, which returns a `Single<Bool>`.
+### Advanced Usage
+
+### RxSwift
+XRouter also supports the RxSwift framework out of the box. Bindings exist for `navigate(to:)`, which returns a `Completable`, and `openURL(_:)`, which returns a `Single<Bool>`.
 ```swift
 router.rx.navigate(to: .loginFlow) // -> Completable
 router.rx.openURL(url) // -> Single<Bool>
 ```
 
-### Advanced Usage
-
 #### URL Support
 
-- Note: XRouter supports deep links and universal links.
+XRouter provides support for deep links and universal links.
 
 You only need to do one thing to add URL support for your routes.
 Implement the static method `registerURLs`:
@@ -109,12 +104,10 @@ enum Route: RouteType {
         return .init(matchers: [
             .group(["example.com", "store.example.com"]) {
                 $0.map("products/") { .allProducts }
-                $0.map("products/{category}/view") { try .products(category: $0.param("category")) }
-                $0.map("user/{id}/profile") { try .viewProfile(withID: $0.param("id")) }
                 $0.map("user/*/logout") { .logout }
             },
             .group("affiliate.website.net.au") {
-                $0.map("*/referral/") { .openReferralProgram(for: $0.rawURL) }
+                $0.map("*/referral/") { .openReferral(for: $0.rawURL) }
             }
         ])
     }
@@ -152,7 +145,6 @@ class Router: XRouter<Route> {
 
     /* ... */
 
-    /// Received an error during
     override func received(unhandledError error: Error) {
         log.error("Oh no! An error occured: \(error)")
     }
@@ -179,12 +171,14 @@ Set the `customTransitionDelegate` for the `Router`:
 router.customTransitionDelegate = self
 ```
 
-(Optional) Define your custom transitions in an extension so you can refer to them statically
+(Optional) Define your custom transitions as a static reference
 ```swift
 extension RouteTransition {
+
     static var heroCrossFade: RouteTransition {
         return .custom(identifier: "HeroCrossFade")
     }
+    
 }
 ```
 
@@ -199,21 +193,22 @@ extension Router: RouterCustomTransitionDelegate {
                            transition: RouteTransition,
                            animated: Bool,
                            completion: ((Error?) -> Void)?) {
-        if transition == .heroCrossFade {
-            sourceViewController.hero.isEnabled = true
-            destViewController.hero.isEnabled = true
-            destViewController.hero.modalAnimationType = .fade
+        guard transition == .heroCrossFade else {
+            assertionFailed("Unhandled custom transition \(transition.name)")
+            completion?(nil)
+        }
+        
+        sourceViewController.hero.isEnabled = true
+        destViewController.hero.isEnabled = true
+        destViewController.hero.modalAnimationType = .fade
 
-            // Creates a container nav stack
-            let containerNavController = UINavigationController()
-            containerNavController.hero.isEnabled = true
-            containerNavController.setViewControllers([newViewController], animated: false)
+        // Creates a container nav stack
+        let containerNavController = UINavigationController()
+        containerNavController.hero.isEnabled = true
+        containerNavController.setViewControllers([newViewController], animated: false)
 
-            // Present the hero animation
-            sourceViewController.present(containerNavController, animated: animated) {
-                completion?(nil)
-            }
-        } else {
+        // Present the hero animation
+        sourceViewController.present(containerNavController, animated: animated) {
             completion?(nil)
         }
     }
@@ -228,7 +223,7 @@ And override the transition to your custom in your Router:
             case .profile:
                 return .heroCrossFade
             default:
-                return super.transition(for: route)
+                return .inferred
         }
     }
 ```
