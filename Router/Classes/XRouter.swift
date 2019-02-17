@@ -111,8 +111,31 @@ open class XRouter<Route: RouteType>: RoutingHandler<Route> {
     }
     
     ///
-    /// An error occured in `openURL(...)` or `navigate(...)` and no completion
+    /// Universal links handler.
+    ///
+    /// - Note: Triggers `received(unhandledError:)` if an error occurs.
+    ///
+    /// - Note: Register URL mappings in the `RouteType` by implementing the
+    ///         static method `registerURLs`.
+    ///
+    /// - Returns: A `Bool` indicating whether the `NSUserActivity` was handled
+    ///            or not.
+    ///
+    open func `continue`(_ userActivity: NSUserActivity) -> Bool {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+            let url = userActivity.webpageURL else {
+                return false
+        }
+        
+        return openURL(url)
+    }
+    
+    ///
+    /// An error occured during `openURL(...)` or `navigate(...)` and no completion
     ///  handler was provided.
+    ///
+    /// - Note: In debug builds, this will cause an exception. In production builds
+    ///         this will fail silently. See `assertionFailure`.
     ///
     open func received(unhandledError error: Error) {
         assertionFailure("An unhandled Router error occured: \(error.localizedDescription)")

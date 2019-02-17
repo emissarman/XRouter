@@ -25,6 +25,15 @@ enum Route: RouteType {
     /// Example modal view controller
     case modalVC
     
+    // MARK: - Helper
+    
+    /// Register URLs
+    static func registerURLs() -> URLMatcherGroup<Route>? {
+        return .group("hubr.io") {
+            $0.map("tab2/home") { .tab2Home }
+        }
+    }
+    
 }
 
 
