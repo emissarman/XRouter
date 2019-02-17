@@ -2,6 +2,9 @@
 
 Notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [v1.3.1](https://github.com/hubrioAU/XRouter/releases/tag/1.3.1)
+- Added `continue(_ userActivity:)` handler for Universal Links
+
 # [v1.3.0](https://github.com/hubrioAU/XRouter/releases/tag/1.3.0)
 - Renamed `Router` to `XRouter`.
 - Moved navigation transition logic to `Navigator` class.

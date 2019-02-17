@@ -26,4 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return container.mainCoordinator.start(inWindow: window)
     }
     
+    /// Universal links handler
+    func application(_ application: UIApplication,
+                     continue userActivity: NSUserActivity,
+                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        let router: Router! = container.router
+        
+        return router.continue(userActivity)
+    }
+    
 }

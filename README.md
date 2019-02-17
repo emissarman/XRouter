@@ -20,7 +20,6 @@ A simple routing library for iOS projects.
 #### Define Routes
 ```swift
 enum Route: RouteType {
-
     case homeTab
     case login
     case profile(withID: Int)
@@ -61,7 +60,7 @@ router.openURL(url)
 ```
 
 ### RxSwift Support
-XRouter also implements reactive bindings for the RxSwift framework. Bindings exist for the `navigate(to:)` method, which returns a `Completable` event, as well as the `openURL(_:)` method, which returns a `Single<Bool>` event (indicating whether or not the url was handled).
+XRouter also implements reactive bindings for the RxSwift framework. Bindings exist for `navigate(to:)`, which returns a `Completable`, and `openURL(_:)`, which returns a `Single<Bool>`.
 ```swift
 router.rx.navigate(to: .loginFlow) // -> Completable
 router.rx.openURL(url) // -> Single<Bool>
@@ -71,19 +70,28 @@ router.rx.openURL(url) // -> Single<Bool>
 
 #### URL Support
 
-You only need to do one thing to add URL support to your routes.
+- Note: XRouter supports deep links and universal links.
+
+You only need to do one thing to add URL support for your routes.
 Implement the static method `registerURLs`:
 ```swift
 enum Route: RouteType {
 
     /* ... */
 
+    /// Register URLs
     static func registerURLs() -> URLMatcherGroup<Route>? {
         return .group("store.example.com") {
             $0.map("products") { .allProducts }
-            $0.map("products/{category}/view") { try .products(category: $0.param("category")) }
-            $0.map("user/{id}/profile") { try .viewProfile(withID: $0.param("id")) }
             $0.map("user/*/logout") { .logout }
+
+            $0.map("products/{category}/view") {
+              try .products(category: $0.param("category"))
+            }
+
+            $0.map("user/{id}/profile") {
+              try .viewProfile(withID: $0.param("id"))
+            }
         }
     }
 
@@ -92,9 +100,12 @@ enum Route: RouteType {
 
 Here is an example with multiple hosts:
 ```swift
-extension MyRoute: RouteProvider {
+enum Route: RouteType {
 
-    static func registerURLs() -> Router<MyRoute>.URLMatcherGroup? {
+    /* ... */
+
+    /// Register URLs
+    static func registerURLs() -> URLMatcherGroup<Route>? {
         return .init(matchers: [
             .group(["example.com", "store.example.com"]) {
                 $0.map("products/") { .allProducts }
@@ -111,22 +122,22 @@ extension MyRoute: RouteProvider {
 }
 ```
 
-Then call the openURL method inside your URL handler. Here is Universal Links for example:
+Then you can call the `openURL(_:animated:completion:)` and/or `continue(_ userActivity:)` methods, e.g. from in your AppDelegate:
 ```swift
 extension AppDelegate {
 
-    /// Open Universal Links
-    func application(_ application: UIApplication,
-                 continue userActivity: NSUserActivity,
-                 restorationHandler: @escaping ([Any]?) -> Void) -> Bool
-    {
-        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-            let url = userActivity.webpageURL,
-            let handledURL = router.openURL(url) else {
-            return false // Unrecognized URL
-        }
+    /// Open URL
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        return router.openURL(url, animated: false)
+    }
 
-        return handledURL
+    /// Continue user activity (universal links)
+    func application(_ application: UIApplication,
+                     continue userActivity: NSUserActivity,
+                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        return router.continue(userActivity)
     }
 
 }
@@ -134,20 +145,7 @@ extension AppDelegate {
 
 #### Handling errors
 
-It can get messy trying to handle errors in every place you call navigate.
-
-You can set a completion handler for an individual navigation action:
-
-```swift
-router.navigate(to: .profilePage(id: "12")) { (optionalError) in
-    if let error = optionalError {
-        print("Oh no, there was an unexpected error!")
-    }
-}
-```
-
-If you handle all navigation errors in the same way, you could provide a wrapper.
-For example, something like this:
+If you handle all navigation errors in the same way, you can override the `received(unhandledError:)` method.
 
 ```swift
 class Router: XRouter<Route> {
@@ -161,6 +159,16 @@ class Router: XRouter<Route> {
 
 }
 
+```
+
+Or you can set a custom completion handler for some individual navigation action:
+
+```swift
+router.navigate(to: .profilePage(withID: 24)) { (optionalError) in
+    if let error = optionalError {
+        print("Oh no, we couldn't go here because there was an error!")
+    }
+}
 ```
 
 #### Custom Transitions

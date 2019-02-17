@@ -28,4 +28,23 @@ class Tab1ViewController: UIViewController {
         coordinator.gotoProfile(withID: "Cameron")
     }
     
+    /// Tapped button 4
+    @IBAction func tappedButton4(_ sender: Any) {
+        let application: UIApplication = UIApplication.shared
+        let appDelegate: AppDelegate! = application.delegate as? AppDelegate
+        let userActivity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+        userActivity.webpageURL = URL(string: "https://hubr.io/tab2/home")
+        
+        _ = appDelegate.application(application, continue: userActivity) { (restoring) in }
+    }
+    
+    /// tapped button 5
+    @IBAction func tappedButton5(_ sender: Any) {
+        let application: UIApplication = UIApplication.shared
+        let appDelegate: AppDelegate! = application.delegate as? AppDelegate
+        let userActivity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+        
+        _ = appDelegate.application(application, continue: userActivity) { (restoring) in }
+    }
+    
 }
