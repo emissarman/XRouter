@@ -2,6 +2,9 @@
 
 Notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [v1.3.2](https://github.com/hubrioAU/XRouter/releases/tag/1.3.2)
+- ([#26](https://github.com/hubrioAU/XRouter/pull/26)) [csknns](https://github.com/csknns): Dropped the minimum iOS requirement from iOS 11.0 to iOS 10.0 in Podspec. 
+
 # [v1.3.1](https://github.com/hubrioAU/XRouter/releases/tag/1.3.1)
 - Added `continue(_ userActivity:)` handler for Universal Links
 
