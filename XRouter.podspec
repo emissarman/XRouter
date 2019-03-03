@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'XRouter'
-  s.version          = '1.3.2'
+  s.version          = '1.4.0'
   s.summary          = 'The simple routing library for iOS.'
 
   s.description      = <<-DESC

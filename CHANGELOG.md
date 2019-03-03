@@ -2,8 +2,13 @@
 
 Notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [v1.4.0](https://github.com/hubrioAU/XRouter/releases/tag/1.4.0)
+- ([#27](https://github.com/hubrioAU/XRouter/pull/27)): Changed the implementation of `RouteTransition` to remove the need for a custom transition delegate. Now create custom RouteTransitions directly.
+- Renamed `RoutingHandler` to `RouteHandler`.
+- All routes (conforming to `RouteType`) are unique on parameters by default. For example, prior to this change `.profile(id: 22) == .profile(id: 44)` would have equated to `true`. To override this, implement `uniqueOnParameters` in your `RouteType`.
+
 # [v1.3.2](https://github.com/hubrioAU/XRouter/releases/tag/1.3.2)
-- ([#26](https://github.com/hubrioAU/XRouter/pull/26)) [csknns](https://github.com/csknns): Dropped the minimum iOS requirement from iOS 11.0 to iOS 10.0 in Podspec. 
+- ([#26](https://github.com/hubrioAU/XRouter/pull/26)) [csknns](https://github.com/csknns): Dropped the minimum iOS requirement from iOS 11.0 to iOS 10.0 in Podspec.
 
 # [v1.3.1](https://github.com/hubrioAU/XRouter/releases/tag/1.3.1)
 - Added `continue(_ userActivity:)` handler for Universal Links
