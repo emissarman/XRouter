@@ -1,6 +1,6 @@
 # XRouter
 
-A simple routing library for iOS projects.
+Navigate anywhere in your iOS app in one line.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d0ef88b70fc843adb2944ce0d956269d)](https://app.codacy.com/app/hubrioAU/XRouter?utm_source=github.com&utm_medium=referral&utm_content=hubrioAU/XRouter&utm_campaign=Badge_Grade_Dashboard)
 [![CodeCov Badge](https://codecov.io/gh/hubrioAU/XRouter/branch/master/graph/badge.svg)](https://codecov.io/gh/hubrioau/XRouter)
@@ -11,47 +11,66 @@ A simple routing library for iOS projects.
 [![Platform](https://img.shields.io/cocoapods/p/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/hubrioau/XRouter/master/XRouter.jpg" alt="XRouter" width="625" style="max-width:625px;width:auto;height:auto;"/>
+<img src="https://raw.githubusercontent.com/hubrioau/XRouter/master/XRouter.jpg" alt="XRouter" width="400" style="max-width:400px;width:auto;height:auto;"/>
 </p>
 
-## Usage
-### Basic Usage
+## Basic Usage
+### Configure
 
 #### Define Routes
 ```swift
+/**
+ Routes
+ */
 enum Route: RouteType {
-    case homeTab
+
+    /// Newsfeed page
+    case newsfeed
+    
+    /// Login flow
     case login
-    case profile(withID: Int)
+    
+    /// Signup flow
+    case signup 
+    
+    /// User profile
+    case profile(userID: String)
+    
 }
 ```
 
-#### Create your Router
+#### Create Router
 ```swift
+/**
+ Router appliance
+ */
 class Router: XRouter<Route> {
 
-    /// Configure the destination view controller for the route
+    // MARK: - Dependencies
+    
+    /// Newsfeed Controller
+    /// - Note: Manages its own navigation stack.
+    private var newsfeedController: NewsfeedController!
+    
+    // MARK: - XRouter
+
+    /// Prepares route destinations
     override func prepareForTransition(to route: Route) throws -> UIViewController {
         switch route {
-        case .homeTab:
-            return container.resolve(HomeTabCoordinator.self)?.rootViewController
-        case .login:
-            return container.resolve(LoginFlowCoordinator.self)?.startFlow()
-        case .profile(let id):
-            return ProfileViewController(withID: id)
+        case .newsfeed: return newsfeedController.rootViewController
+        case .login: return LoginFlowCoordinator().start()
+        case .signup: return SignupFlowCoordinator().start()
+        case .profile(let userID): return UserProfileViewController(withID: userID)
         }
     }
 
 }
 ```
 
-#### Using a Router
+#### Use Router
 ```swift
 // Navigate to a route
 router.navigate(to: .loginFlow)
-
-// ... or open a route from a URL
-router.openURL(url)
 ```
 
 ### Advanced Usage
@@ -63,6 +82,23 @@ router.rx.navigate(to: .loginFlow) // -> Completable
 router.rx.openURL(url) // -> Single<Bool>
 ```
 
+### Transitions
+XRouter supports manually defining transitions.
+```swift
+class Router: XRouter<Route> {
+
+    /// Set the transition for routes.
+    override func transition(for route: Route) -> RouteTransition {
+        switch route {
+        case .newsfeed: return .set     /* Uses UINavigationController(_:).setViewControllers(...) */
+        case .profile: return .modal    /* Uses UIViewController(_:).present(...) */
+        case default: return .inferred  /* Default. Use appropriate transition based on context. */
+        }
+    }
+    
+}
+```
+
 #### URL Support
 
 XRouter provides support for deep links and universal links.
@@ -72,9 +108,7 @@ Implement the static method `registerURLs`:
 ```swift
 enum Route: RouteType {
 
-    /* ... */
-
-    /// Register URLs
+    /// Register URL host and path groups to map to routes.
     static func registerURLs() -> URLMatcherGroup<Route>? {
         return .group("store.example.com") {
             $0.map("products") { .allProducts }
@@ -93,43 +127,17 @@ enum Route: RouteType {
 }
 ```
 
-Here is an example with multiple hosts:
-```swift
-enum Route: RouteType {
-
-    /* ... */
-
-    /// Register URLs
-    static func registerURLs() -> URLMatcherGroup<Route>? {
-        return .init(matchers: [
-            .group(["example.com", "store.example.com"]) {
-                $0.map("products/") { .allProducts }
-                $0.map("user/*/logout") { .logout }
-            },
-            .group("affiliate.website.net.au") {
-                $0.map("*/referral/") { .openReferral(for: $0.rawURL) }
-            }
-        ])
-    }
-
-}
-```
-
 Then you can call the `openURL(_:animated:completion:)` and/or `continue(_ userActivity:)` methods, e.g. from in your AppDelegate:
 ```swift
 extension AppDelegate {
 
-    /// Open URL
-    func application(_ app: UIApplication,
-                     open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+    /// Handle deep links.
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         return router.openURL(url, animated: false)
     }
 
-    /// Continue user activity (universal links)
-    func application(_ application: UIApplication,
-                     continue userActivity: NSUserActivity,
-                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    /// Handle universal links.
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return router.continue(userActivity)
     }
 
@@ -142,8 +150,6 @@ If you handle all navigation errors in the same way, you can override the `recei
 
 ```swift
 class Router: XRouter<Route> {
-
-    /* ... */
 
     override func received(unhandledError error: Error) {
         log.error("Oh no! An error occured: \(error)")
