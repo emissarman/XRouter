@@ -42,19 +42,11 @@ enum Route: RouteType {
 #### Create Router
 ```swift
 /**
- Router appliance
+ Router
  */
 class Router: XRouter<Route> {
 
-    // MARK: - Dependencies
-    
-    /// Newsfeed Controller
-    /// - Note: Manages its own navigation stack.
-    private var newsfeedController: NewsfeedController!
-    
-    // MARK: - XRouter
-
-    /// Prepares route destinations
+    /// Prepares route destinations.
     override func prepareForTransition(to route: Route) throws -> UIViewController {
         switch route {
         case .newsfeed: return newsfeedController.rootViewController
@@ -98,6 +90,7 @@ class Router: XRouter<Route> {
     
 }
 ```
+See _Custom Transitions_ for details about how you can easily create and use custom transitions.
 
 #### URL Support
 
