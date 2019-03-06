@@ -61,8 +61,11 @@ class Router: XRouter<Route> {
 
 #### Use Router
 ```swift
-// Navigate to a route
-router.navigate(to: .loginFlow)
+// Navigate directly to a route
+router.navigate(to: .newsfeed)
+
+// Open a URL
+router.openURL(url)
 ```
 
 ### Advanced Usage
