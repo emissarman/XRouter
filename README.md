@@ -196,7 +196,7 @@ And set the transition to your custom transition in your Router:
 
 ## Documentation
 
-Complete [documentation is available here](https://reececomo.github.io/XRouter).
+Complete [documentation is available here](https://hubrioau.github.io/XRouter/).
 
 ## Example
 
