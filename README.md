@@ -11,7 +11,7 @@ Navigate anywhere in your iOS app in one line.
 [![Platform](https://img.shields.io/cocoapods/p/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/hubrioau/XRouter/master/XRouter.jpg" alt="XRouter" width="400" style="max-width:400px;width:auto;height:auto;"/>
+<img src="https://raw.githubusercontent.com/hubrioau/XRouter/master/XRouter.jpg?17-Mar" alt="XRouter" width="400" style="max-width:400px;width:auto;height:auto;"/>
 </p>
 
 ## Basic Usage
