@@ -10,6 +10,7 @@ Navigate anywhere in just one line.
 [![License](https://img.shields.io/cocoapods/l/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
 [![Platform](https://img.shields.io/cocoapods/p/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
 [![Language](https://img.shields.io/badge/language-Swift-ed5036.svg)](https://swift.org)
+[![Language](https://img.shields.io/badge/RxSwift-compatible-blueviolet.svg)](https://swift.org)
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/hubrioau/XRouter/master/XRouter.jpg?17-Mar" alt="XRouter" width="400" style="max-width:400px;width:auto;height:auto;"/>
