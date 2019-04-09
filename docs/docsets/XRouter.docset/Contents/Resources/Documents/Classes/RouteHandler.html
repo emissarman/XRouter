@@ -161,9 +161,9 @@ Required to set class visibility to public.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7XRouter12RouteHandlerC20prepareForTransition2toSo16UIViewControllerCx_tKF"></a>
-                    <a name="//apple_ref/swift/Method/prepareForTransition(to:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7XRouter12RouteHandlerC20prepareForTransition2toSo16UIViewControllerCx_tKF">prepareForTransition(to:)</a>
+                    <a name="/s:7XRouter12RouteHandlerC14viewController3forSo06UIViewE0Cx_tKF"></a>
+                    <a name="//apple_ref/swift/Method/viewController(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter12RouteHandlerC14viewController3forSo06UIViewE0Cx_tKF">viewController(for:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -171,13 +171,13 @@ Required to set class visibility to public.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Return the view controller for your Route here.</p>
+                        <p>Configure the view controller for your route here.</p>
 
-<p>It can be either a container (i.e. Navigation Controller) or an
+<p>You can either give it the container (i.e. Navigation Controller) or an
   instance of a single view controller.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
-    Throw an Error here to cancel the transition.
+    Throw any <code>Error</code> here to cancel the transition.
 
 </div>
 
@@ -186,7 +186,7 @@ Required to set class visibility to public.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">prepareForTransition</span><span class="p">(</span><span class="n">to</span> <span class="nv">route</span><span class="p">:</span> <span class="kt">R</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">UIViewController</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">viewController</span><span class="p">(</span><span class="k">for</span> <span class="nv">route</span><span class="p">:</span> <span class="kt">R</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">UIViewController</span></code></pre>
 
                         </div>
                       </div>
