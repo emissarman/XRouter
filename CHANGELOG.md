@@ -2,6 +2,10 @@
 
 Notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [v1.4.1](https://github.com/hubrioAU/XRouter/releases/tag/1.4.1)
+- ([#29](https://github.com/hubrioAU/XRouter/pull/29)): Renamed the XRouter method `prepareForNavigation(to:)` to `viewController(for:)` to be a little more explicit about what it's role is.
+- refactored `received(unhandledError:)`.
+
 # [v1.4.0](https://github.com/hubrioAU/XRouter/releases/tag/1.4.0)
 - ([#27](https://github.com/hubrioAU/XRouter/pull/27)): Changed the implementation of `RouteTransition` to remove the need for a custom transition delegate. Now create custom RouteTransitions directly.
 - Renamed `RoutingHandler` to `RouteHandler`.
