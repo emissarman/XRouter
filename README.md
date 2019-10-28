@@ -8,8 +8,6 @@ Navigate anywhere in just one line.
 [![Docs Badge](https://raw.githubusercontent.com/hubrioAU/XRouter/master/docs/badge.svg?sanitize=true)](https://hubrioau.github.io/XRouter)
 [![Version](https://img.shields.io/cocoapods/v/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
 [![License](https://img.shields.io/cocoapods/l/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
-[![Platform](https://img.shields.io/cocoapods/p/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
-[![Language](https://img.shields.io/badge/language-Swift-ed5036.svg)](https://swift.org)
 [![Language](https://img.shields.io/badge/RxSwift-compatible-blueviolet.svg)](https://swift.org)
 
 <p align="center">
@@ -21,9 +19,6 @@ Navigate anywhere in just one line.
 
 #### Define Routes
 ```swift
-/**
- Routes
- */
 enum Route: RouteType {
     case newsfeed
     case login
@@ -34,13 +29,9 @@ enum Route: RouteType {
 
 #### Create Router
 ```swift
-/**
- Router
- */
 class Router: XRouter<Route> {
 
-    /// Configure the view controller for the route.
-    override func viewController(for route: Route) throws -> UIViewController {
+    override func prepareDestination(for route: Route) throws -> UIViewController {
         switch route {
         case .newsfeed: return newsfeedController.rootViewController
         case .login: return LoginFlowCoordinator().start()
@@ -55,7 +46,7 @@ class Router: XRouter<Route> {
 #### Use Router
 ```swift
 // Navigate directly to a route
-router.navigate(to: .newsfeed)
+router.navigate(to: .profile(3355))
 
 // Open a URL
 router.openURL(url)
@@ -71,19 +62,18 @@ router.rx.openURL(url) // -> Single<Bool>
 ```
 
 ### Transitions
-XRouter supports manually defining transitions.
+XRouter also supports custom/manually defined transitions.
 ```swift
 class Router: XRouter<Route> {
 
-    /// Set the transition for routes.
     override func transition(for route: Route) -> RouteTransition {
         switch route {
-        case .newsfeed: return .set     /* Uses UINavigationController(_:).setViewControllers(...) */
-        case .profile: return .modal    /* Uses UIViewController(_:).present(...) */
-        case default: return .inferred  /* Default. Use appropriate transition based on context. */
+        case .signup: return .push
+        case .profile: return .modal
+        case default: return .automatic
         }
     }
-    
+
 }
 ```
 See _Custom Transitions_ for details about how you can easily create and use custom transitions.
@@ -183,7 +173,7 @@ And set the transition to your custom transition in your Router:
           return heroCrossFade
         }
 
-        return .inferred
+        return .automatic
     }
 ```
 

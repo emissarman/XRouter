@@ -5,116 +5,130 @@
 
 import UIKit
 
+/// Transition closure.
+public typealias TransitionClosure = (_ from: UIViewController,
+                                      _ to: UIViewController,
+                                      _ animated: Bool,
+                                      _ completion: @escaping (Error?) -> Void) -> Void
+
 /**
  The types of presentation transitions for Routes.
- 
+
  ```swift
  let myTransition = RouteTransition { (source, destination, animated, completion) in
      source.present
  }
  ```
  */
-public class RouteTransition: Equatable {
-    
-    /// Performs transition from source view controller to destination view controller.
-    public var execute: (_ sourceViewController: UIViewController,
-                         _ destViewController: UIViewController,
-                         _ animated: Bool,
-                         _ completion: @escaping (Error?) -> Void) -> ()
-    
+public class RouteTransition {
+    internal let performTransition: TransitionClosure
+
     /// Constructor.
-    public init(_ execute: @escaping (UIViewController, UIViewController, Bool, @escaping (Error?) -> Void) -> Void) {
-        self.execute = execute
+    public init(_ transition: @escaping TransitionClosure) {
+        self.performTransition = transition
     }
-    
-    /// Equatable.
-    public static func == (_ lhs: RouteTransition, _ rhs: RouteTransition) -> Bool {
-        return lhs === rhs
-    }
-    
+
 }
 
-extension RouteTransition {
-    
+/**
+ Built-in Transitions
+ */
+public extension RouteTransition {
+
     // MARK: - Built-in Transitions
-    
+
     ///
-    /// Automatically infers the best transition to use from the context.
+    /// Automatically infer an appropriate transition from the current context.
     ///
-    public static let inferred = RouteTransition { (source, destination, animated, completion) in
-        if (source as? UINavigationController) == nil || (destination as? UINavigationController) != nil {
-            modal.execute(source, destination, animated, completion)
-        } else if destination.navigationController == source {
-            set.execute(source, destination, animated, completion)
-        } else {
-            push.execute(source, destination, animated, completion)
-        }
+    static let automatic = RouteTransition { (source, destination, animated, completion) in
+        inferTransition(from: source, to: destination)
+            .performTransition(source, destination, animated, completion)
     }
-    
+
     ///
     /// Uses `UIViewController(_:).present(_:animated:completion:)`.
     ///
     /// - See: https://developer.apple.com/documentation/uikit/uiviewcontroller/1621380-presentviewcontroller
     ///
-    public static let modal = RouteTransition { (source, destination, animated, completion) in
+    static let modal = RouteTransition { (source, destination, animated, completion) in
         source.present(destination, animated: animated) {
             completion(nil)
         }
     }
-    
+
     ///
-    /// Uses `UINavigationController(_:).pushViewController(_:animated:)`.
+    /// Uses `UINavigationController(_:).pushViewController(_:animated:)`if the destination view controller is not already
+    /// in the navigation hierachy, otherwise it will use `UINavigationController(_:).setViewControllers(to:animated:)`.
+    ///
+    /// Push the view controller (or pop to it if it is already in the stack).
     ///
     /// - Note: This transition can *only* be used when you are navigating from a `UINavigationController`.
     ///
-    /// If the view controller is already on the navigation stack, this method throws an exception.
     /// - See: https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621887-pushviewcontroller?language=objc
     ///
-    public static let push = RouteTransition { (source, destination, animated, completion) in
+    static let push = RouteTransition { (source, destination, animated, completion) in
         guard let navController = source as? UINavigationController else {
             completion(RouterError.missingRequiredNavigationController)
             return
         }
-        
-        navController.pushViewController(destination, animated: animated) {
-            completion(nil)
+
+        if let index = navController.viewControllers.firstIndex(of: destination) {
+            // If already in the stack, dismiss any view controllers that are on top.
+            navController.setViewControllers(Array(navController.viewControllers[...index]), animated: animated) {
+                completion(nil)
+            }
+        } else {
+            // Otherwise push the new view controller.
+            navController.pushViewController(destination, animated: animated) {
+                completion(nil)
+            }
         }
     }
-    
+
+    ///
+    /// Clear the stack and replace it with the destination view controller.
     ///
     /// Uses `UINavigationController(_:).setViewControllers(to:animated:)`.
     ///
     /// - Note: This transition can *only* be used when you are navigating from a `UINavigationController`.
     ///
-    /// Use this to update or replace the current view controller stack without pushing or popping each controller explicitly.
-    /// If animations are enabled, this method decides which type of transition to perform based on whether the last item in the items array is already in the navigation stack.
     /// If the view controller is currently in the stack, but is not the topmost item, this method uses a pop transition; if it is the topmost item, no transition is performed. If the view controller is not on the stack, this method uses a push transition.
-    /// Only one transition is performed, but when that transition finishes, the entire contents of the stack are replaced with the new view controllers. For example, if controllers A, B, and C are on the stack and you set controllers D, A, and B, this method uses a pop transition and the resulting stack contains the controllers D, A, and B.
     /// - See: https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621861-setviewcontrollers
     ///
-    public static let set = RouteTransition { (source, destination, animated, completion) in
+    static let replace = RouteTransition { (source, destination, animated, completion) in
         guard let navController = source as? UINavigationController else {
             completion(RouterError.missingRequiredNavigationController)
             return
         }
         
-        let viewControllers: [UIViewController]
-        
-        if let index = navController.viewControllers.firstIndex(of: destination) {
-            //
-            // Pop all view controllers above the destination
-            //
-            viewControllers = Array(navController.viewControllers[...index])
-        } else {
-            //
-            // Set destination
-            //
-            viewControllers = [destination]
-        }
-        
-        navController.setViewControllers(viewControllers, animated: animated) {
+        navController.setViewControllers([destination], animated: animated) {
             completion(nil)
         }
+    }
+    
+    // MARK: - Implementation
+    
+    /// Infer the best transition to use for two view controllers in the view hierachy.
+    private static func inferTransition(from source: UIViewController,
+                                        to destination: UIViewController) -> RouteTransition {
+        // We need to use a modal if we don't have a nav controller or we're moving to a new one.
+        if !(source is UINavigationController) || destination is UINavigationController {
+            return modal
+        }
+        
+        return push
+    }
+
+}
+
+/**
+ Equatable
+ */
+extension RouteTransition: Equatable {
+    
+    /// Uses identity for equality check.
+    public static func == (lhs: RouteTransition, rhs: RouteTransition) -> Bool {
+        return lhs === rhs
     }
     
 }

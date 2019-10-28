@@ -63,7 +63,7 @@ class AnimatedTabBarController: UITabBarController, UITabBarControllerDelegate {
         // Disable interaction during animation
         view.isUserInteractionEnabled = false
         
-        UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.15, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             // Slide the views by -offset
             fromView.center = CGPoint(x: fromView.center.x - offset, y: fromView.center.y);
             toView.center   = CGPoint(x: toView.center.x - offset, y: toView.center.y);

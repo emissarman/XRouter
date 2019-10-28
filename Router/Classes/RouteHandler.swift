@@ -31,15 +31,15 @@ open class RouteHandler<R: RouteType> {
     ///
     /// - Note: Throw any `Error` here to cancel the transition.
     ///
-    open func viewController(for route: R) throws -> UIViewController {
-        throw RouterError.routeHasNotBeenConfigured
+    open func prepareDestination(for route: R) throws -> UIViewController {
+        throw RouterError.destinationHasNotBeenConfigured
     }
     
     ///
     /// Presentation transition type for Route.
     ///
     open func transition(for route: R) -> RouteTransition {
-        return .inferred
+        return .automatic
     }
     
 }

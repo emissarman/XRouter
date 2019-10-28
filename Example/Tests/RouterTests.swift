@@ -85,7 +85,7 @@ class RouterTests: ReactiveTestCase {
     func testFowardsErrorsThrownInRouteTypePrepareForTransition() {
         let router = MockRouter(rootViewController: UIViewController())
         
-        navigateExpectError(router, to: .alwaysFails, error: RouterError.routeHasNotBeenConfigured)
+        navigateExpectError(router, to: .alwaysFails, error: RouterError.destinationHasNotBeenConfigured)
     }
     
     /// Test custom transition delegate is triggered
@@ -141,7 +141,7 @@ class RouterTests: ReactiveTestCase {
         XCTAssertEqual(router.currentRoute!, .settingsVC)
         
         // Test RxSwift failure
-        rxNavigateExpectError(router, to: .alwaysFails, error: RouterError.routeHasNotBeenConfigured)
+        rxNavigateExpectError(router, to: .alwaysFails, error: RouterError.destinationHasNotBeenConfigured)
         XCTAssertEqual(router.currentRoute!, .settingsVC)
         
         navigate(router, to: .nestedModalGroup)
@@ -201,7 +201,7 @@ private class MockRouter: MockRouterBase<TestRoute> {
         case .homeVC,
              .secondHomeVC,
              .customVC:
-            return .set
+            return .replace
         case .settingsVC,
              .alwaysFails:
             return .push
@@ -214,7 +214,7 @@ private class MockRouter: MockRouterBase<TestRoute> {
     }
     
     /// Prepare for transition
-    override func viewController(for route: TestRoute) throws -> UIViewController {
+    override func prepareDestination(for route: TestRoute) throws -> UIViewController {
         switch route {
         case .homeVC,
              .secondHomeVC:
@@ -228,7 +228,7 @@ private class MockRouter: MockRouterBase<TestRoute> {
         case .nestedModalGroup:
             return UINavigationController(rootViewController: UIViewController())
         case .alwaysFails:
-            throw RouterError.routeHasNotBeenConfigured
+            throw RouterError.destinationHasNotBeenConfigured
         }
     }
     

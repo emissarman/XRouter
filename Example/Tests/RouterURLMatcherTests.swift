@@ -158,7 +158,7 @@ class RouterURLMatcherTests: ReactiveTestCase {
         
         // Test RxSwift extension works too
         rxOpenURLExpectError(router, url: URL(string: "http://example.com/failing")!,
-                             error: RouterError.routeHasNotBeenConfigured)
+                             error: RouterError.destinationHasNotBeenConfigured)
     }
     
 }
@@ -217,7 +217,7 @@ private enum TestRoute: RouteType {
 
 private class MockRouter: MockRouterBase<TestRoute> {
     
-    override func viewController(for route: TestRoute) throws -> UIViewController {
+    override func prepareDestination(for route: TestRoute) throws -> UIViewController {
         switch route {
         case .exampleStaticRoute:
             let viewController = UIViewController()
@@ -235,7 +235,7 @@ private class MockRouter: MockRouterBase<TestRoute> {
             return viewController
             
         case .failingRoute:
-            throw RouterError.routeHasNotBeenConfigured
+            throw RouterError.destinationHasNotBeenConfigured
             
         default:
             return UIViewController()

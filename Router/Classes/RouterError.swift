@@ -26,7 +26,7 @@ public enum RouterError {
     case requiredIntegerParameterWasNotAnInteger(parameter: String, stringValue: String)
     
     /// No view controller has been configured
-    case routeHasNotBeenConfigured
+    case destinationHasNotBeenConfigured
     
 }
 
@@ -41,7 +41,7 @@ extension RouterError: LocalizedError {
             return """
             Attempted to navigate to a route, but the source view controller was not a navigation controller.
             """
-        case .missingRequiredPathParameter(let name):
+        case let .missingRequiredPathParameter(name):
             return """
             Missing required paramter \"\(name)\" while unwrapping URL route.
             """
@@ -51,12 +51,12 @@ extension RouterError: LocalizedError {
             This could be because the top view controller is an empty navigation controller, or
             if the window, or window's root view controller is `nil`.
             """
-        case .requiredIntegerParameterWasNotAnInteger(let name, let stringValue):
+        case let .requiredIntegerParameterWasNotAnInteger(name, stringValue):
             return """
             Required integer parameter \"\(name)\" existed, but was not an integer.
             Instead \"\(stringValue)\" was received."
             """
-        case .routeHasNotBeenConfigured:
+        case .destinationHasNotBeenConfigured:
             return """
             Attempted to navigate to a route, but no route was configured.
             """
@@ -70,7 +70,7 @@ extension RouterError: LocalizedError {
             return """
             Nest the parent view controller in a `UINavigationController`.
             """
-        case .missingRequiredPathParameter(let name):
+        case let .missingRequiredPathParameter(name):
             return """
             You referenced a parameter \"\(name)\" that wasn't declared in the `PathPattern`.
             Please include the parameter in `PathPattern`, or remove it from the mapping.
@@ -79,11 +79,11 @@ extension RouterError: LocalizedError {
             return """
             Something unexpected has happened and the source view controller was not able to be located.
             """
-        case .requiredIntegerParameterWasNotAnInteger(_, let stringValue):
+        case let .requiredIntegerParameterWasNotAnInteger(_, stringValue):
             return """
             The value that was received was \"\(stringValue)\", which could not be cast to `Int`.
             """
-        case .routeHasNotBeenConfigured:
+        case .destinationHasNotBeenConfigured:
             return """
             Configure view controllers for your routes by overriding `prepareForNavigation(to:)` in your Router,
             or by implementing a `RoutingHandler`.

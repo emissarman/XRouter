@@ -21,7 +21,7 @@ class RouterErrorTests: XCTestCase {
         assertExpectedFormat(for: .missingRequiredNavigationController)
         assertExpectedFormat(for: .missingRequiredPathParameter(parameter: "test"))
         assertExpectedFormat(for: .requiredIntegerParameterWasNotAnInteger(parameter: "test", stringValue: "test"))
-        assertExpectedFormat(for: .routeHasNotBeenConfigured)
+        assertExpectedFormat(for: .destinationHasNotBeenConfigured)
     }
     
     private func assertExpectedFormat(for error: RouterError) {

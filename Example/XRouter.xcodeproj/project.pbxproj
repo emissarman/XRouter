@@ -22,6 +22,7 @@
 		2916F82922070EC300C5F51F /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2916F82822070EC300C5F51F /* ProfileViewController.swift */; };
 		29209BFE21E9CACF00DBCE22 /* RouterURLMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29209BFC21E9CABD00DBCE22 /* RouterURLMatcherTests.swift */; };
 		29209C0121E9CB8200DBCE22 /* MockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29209BFF21E9CB0400DBCE22 /* MockRouter.swift */; };
+		295B156D2367B4AF0069CFE5 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295B156C2367B4AF0069CFE5 /* Routes.swift */; };
 		2968297D21F2CC1E00CB0954 /* UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2968297C21F2CC1E00CB0954 /* UITests.swift */; };
 		2995529321F61BF6008B68ED /* UIViewControllerExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2995529221F61BF6008B68ED /* UIViewControllerExtensionTests.swift */; };
 		2995529521F61D95008B68ED /* PathPatternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2995529421F61D95008B68ED /* PathPatternTests.swift */; };
@@ -74,6 +75,7 @@
 		2916F82822070EC300C5F51F /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		29209BFC21E9CABD00DBCE22 /* RouterURLMatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterURLMatcherTests.swift; sourceTree = "<group>"; };
 		29209BFF21E9CB0400DBCE22 /* MockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRouter.swift; sourceTree = "<group>"; };
+		295B156C2367B4AF0069CFE5 /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
 		2968297A21F2CC1E00CB0954 /* XRouter_UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XRouter_UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2968297C21F2CC1E00CB0954 /* UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITests.swift; sourceTree = "<group>"; };
 		2968297E21F2CC1E00CB0954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				2916F8162206FC0200C5F51F /* Container.swift */,
 				2901DFCB220EAB340016EB5C /* Router.swift */,
+				295B156C2367B4AF0069CFE5 /* Routes.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -514,6 +518,7 @@
 				2916F8242206FF3B00C5F51F /* ModalCoordinator.swift in Sources */,
 				2916F80F2206FA4100C5F51F /* Tab1ViewController.swift in Sources */,
 				2901DFCC220EAB340016EB5C /* Router.swift in Sources */,
+				295B156D2367B4AF0069CFE5 /* Routes.swift in Sources */,
 				29BE24B6220722D40065EA85 /* Tab2SecondViewController.swift in Sources */,
 				2916F82922070EC300C5F51F /* ProfileViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,

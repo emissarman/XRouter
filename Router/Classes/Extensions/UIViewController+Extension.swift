@@ -14,7 +14,7 @@ internal extension UIViewController {
     
     /// Child if this is a container view controller, otherwise self.
     /// - Note: Currently does not handle split view controller
-    internal var topViewController: UIViewController {
+    var topViewController: UIViewController {
         return presentedViewController?.topViewController
             ?? (self as? UITabBarController)?.selectedViewController?.topViewController
             ?? (self as? UINavigationController)?.visibleViewController?.topViewController
@@ -22,9 +22,9 @@ internal extension UIViewController {
     }
     
     /// Dismiss then transition to descendant view controller.
-    internal func transition(toDescendant viewController: UIViewController,
-                             animated: Bool,
-                             completion: @escaping () -> Void) {
+    func transition(toDescendant viewController: UIViewController,
+                    animated: Bool,
+                    completion: @escaping () -> Void) {
         dismissIfNeeded(animated: animated) {
             // Switch tabs if this is a tab bar controller
             if let tabBarController = self as? UITabBarController {
@@ -40,7 +40,7 @@ internal extension UIViewController {
     ///
     /// - Returns: Lowest common ancestor, or `nil` if there is no common ancestor.
     ///
-    internal func getNearestCommonAncestor(with viewController: UIViewController) -> UIViewController? {
+    func getNearestCommonAncestor(with viewController: UIViewController) -> UIViewController? {
         var currentABranch = self
         var currentBBranch = viewController
         

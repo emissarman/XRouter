@@ -20,12 +20,12 @@ class RouteHandlerTests: ReactiveTestCase {
     
     func testUnconfiguredRouterThrowsError() {
         let router = MockRouter()
-        navigateExpectError(router, to: .example, error: RouterError.routeHasNotBeenConfigured)
+        navigateExpectError(router, to: .example, error: RouterError.destinationHasNotBeenConfigured)
     }
     
     func testDefaultTransitionIsInferred() {
         let routeHandler = MockRouteHandler()
-        XCTAssertEqual(routeHandler.transition(for: .example), .inferred)
+        XCTAssertEqual(routeHandler.transition(for: .example), .automatic)
     }
     
 }
@@ -38,7 +38,7 @@ private class MockRouter: MockRouterBase<Route> { }
 
 private class MockRouteHandler: RouteHandler<Route> {
     
-    override func viewController(for route: Route) throws -> UIViewController {
+    override func prepareDestination(for route: Route) throws -> UIViewController {
         switch route {
         case .example:
             return UIViewController()
