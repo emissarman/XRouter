@@ -21,6 +21,8 @@ public typealias TransitionClosure = (_ from: UIViewController,
  ```
  */
 public class RouteTransition {
+  
+    /// Transition storage
     internal let performTransition: TransitionClosure
 
     /// Constructor.
