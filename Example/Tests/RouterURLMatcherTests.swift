@@ -85,13 +85,43 @@ class RouterURLMatcherTests: ReactiveTestCase {
     }
     
     /// Test dynamic string routes
-    func testURLMatcherGroupFunctionInitWithOneHost() {
+    func testURLMatcherGroupFunctionInitWithOneHostCaseInsensitive() {
         let matcherGroup = URLMatcherGroup<TestRoute>.host("mystore.com") {
             $0.map("my/cool/route") { .exampleStaticRoute }
-            $0.map("static/route/") { .exampleStaticRoute }
+            $0.map("example/route/") { .exampleSchemeOnlyRoute }
         }
         
         XCTAssertEqual(matcherGroup.matchers.count, 1)
+        
+        let route: TestRoute! = try! matcherGroup.findMatch(forURL: URL(string: "scheme://MyStore.com/example/route")!)
+        
+        XCTAssertEqual(route, .exampleSchemeOnlyRoute)
+    }
+    
+    /// Test dynamic string routes
+    func testURLMatcherGroupFunctionInitWithOneSchemeCaseInsensitive() {
+        let matcherGroup = URLMatcherGroup<TestRoute>.scheme("fancyScheme") {
+            $0.map("my/cool/route") { .exampleStaticRoute }
+        }
+        
+        XCTAssertEqual(matcherGroup.matchers.count, 1)
+        
+        let route: TestRoute! = try! matcherGroup.findMatch(forURL: URL(string: "fancyscheme://host/my/cool/route")!)
+        
+        XCTAssertEqual(route, .exampleStaticRoute)
+    }
+    
+    /// Test dynamic string routes
+    func testURLMatcherGroupFailsToFindForNotMatchedScheme() {
+        let matcherGroup = URLMatcherGroup<TestRoute>.scheme("fancyScheme") {
+            $0.map("my/cool/route") { .exampleStaticRoute }
+        }
+        
+        XCTAssertEqual(matcherGroup.matchers.count, 1)
+        
+        let route: TestRoute! = try! matcherGroup.findMatch(forURL: URL(string: "wrongscheme://host/my/cool/route")!)
+        
+        XCTAssertEqual(route, .exampleStaticRoute)
     }
     
     /// Test dynamic string routes
