@@ -27,6 +27,12 @@ class RouterURLMatcherTests: ReactiveTestCase {
         
         openURL(router, url: URL(string: "http://example.com/static/route")!)
         XCTAssertEqual(router.currentRoute, .exampleStaticRoute)
+        
+        openURL(router, url: URL(string: "example://unknown/special/route")!)
+        XCTAssertEqual(router.currentRoute, .specialRouteMatchedByAll(host: "unknown", scheme: "example"))
+        
+        openURL(router, url: URL(string: "example://unknown/cool/route")!)
+        XCTAssertEqual(router.currentRoute, .exampleSchemeOnlyRoute)
     }
     
     /// Test dynamic string routes
@@ -80,7 +86,7 @@ class RouterURLMatcherTests: ReactiveTestCase {
     
     /// Test dynamic string routes
     func testURLMatcherGroupFunctionInitWithOneHost() {
-        let matcherGroup = URLMatcherGroup<TestRoute>.group("mystore.com") {
+        let matcherGroup = URLMatcherGroup<TestRoute>.host("mystore.com") {
             $0.map("my/cool/route") { .exampleStaticRoute }
             $0.map("static/route/") { .exampleStaticRoute }
         }
@@ -168,6 +174,12 @@ private enum TestRoute: RouteType {
     /// Static route
     case exampleStaticRoute
     
+    /// Special static route that can be matched by anything
+    case specialRouteMatchedByAll(host: String?, scheme: String?)
+    
+    /// Example scheme-only route
+    case exampleSchemeOnlyRoute
+    
     /// Has custom name
     case exampleStringDynamicRoute(named: String)
     
@@ -188,29 +200,35 @@ private enum TestRoute: RouteType {
     
     static func registerURLs() -> URLMatcherGroup<TestRoute>? {
         return .init(matchers: [
-            .group("example.com") {
-                $0.map("static/route/") { .exampleStaticRoute }
-                $0.map("dynamic/string/{name}") { try .exampleStringDynamicRoute(named: $0.param("name")) }
-                $0.map("dynamic/int/{id}") { try .exampleIntDynamicRoute(withID: $0.param("id")) }
-                $0.map("dynamic/wildcard/*/whatever") { .exampleWildcardRoute }
-                $0.map("some-qs/route") { .exampleQueryStringRoute(page: $0.query("page") ?? 0) }
-                $0.map("some/other-qs/route") { .exampleQueryStringRoute2(name: $0.query("name") ?? "") }
-                $0.map("route/missing/param") { try .exampleStringDynamicRoute(named: $0.param("whoops")) }
-                $0.map("failing") { .failingRoute }
+            .host("example.com") {
+                $0.map("/static/route") { .exampleStaticRoute }
+                $0.map("/dynamic/string/{name}") { try .exampleStringDynamicRoute(named: $0.path("name")) }
+                $0.map("/dynamic/int/{id}") { try .exampleIntDynamicRoute(withID: $0.path("id")) }
+                $0.map("/dynamic/wildcard/*/whatever") { .exampleWildcardRoute }
+                $0.map("/some-qs/route") { .exampleQueryStringRoute(page: $0.query("page") ?? 0) }
+                $0.map("/some/other-qs/route") { .exampleQueryStringRoute2(name: $0.query("name") ?? "") }
+                $0.map("/route/missing/param") { try .exampleStringDynamicRoute(named: $0.path("whoops")) }
+                $0.map("/failing") { .failingRoute }
             },
-            .group(["second-website.com",
-                    "third.website.net.au"]
-            ) {
-                $0.map("static/route/") { .exampleStaticRoute }
-                $0.map("dynamic/string/{name}") { try .exampleStringDynamicRoute(named: $0.param("name")) }
-                $0.map("dynamic/int/{id}") { try .exampleIntDynamicRoute(withID: $0.param("id")) }
-                $0.map("dynamic/wildcard/*/whatever") { .exampleWildcardRoute }
-                $0.map("some-qs/route") { .exampleQueryStringRoute(page: $0.query("page") ?? 0) }
-                $0.map("some/other-qs/route") { .exampleQueryStringRoute2(name: $0.query("name") ?? "") }
-                $0.map("route/missing/param") { try .exampleStringDynamicRoute(named: $0.param("whoops")) }
+            .group(hosts: .many([
+                "second-website.com",
+                "third.website.net.au"
+            ])) {
+                $0.map("/static/route") { .exampleStaticRoute }
+                $0.map("/dynamic/string/{name}") { try .exampleStringDynamicRoute(named: $0.path("name")) }
+                $0.map("/dynamic/int/{id}") { try .exampleIntDynamicRoute(withID: $0.path("id")) }
+                $0.map("/dynamic/wildcard/*/whatever") { .exampleWildcardRoute }
+                $0.map("/some-qs/route") { .exampleQueryStringRoute(page: $0.query("page") ?? 0) }
+                $0.map("/some/other-qs/route") { .exampleQueryStringRoute2(name: $0.query("name") ?? "") }
+                $0.map("/route/missing/param") { try .exampleStringDynamicRoute(named: $0.path("whoops")) }
+            },
+            .group {
+                $0.map("/special/route") { .specialRouteMatchedByAll(host: $0.host, scheme: $0.scheme) }
+            },
+            .scheme("example") {
+                $0.map("/cool/route") { .exampleSchemeOnlyRoute }
             }
-            ]
-        )
+        ])
     }
     
 }

@@ -21,7 +21,7 @@ enum Route: RouteType {
     
     /// Register URLs
     static func registerURLs() -> URLMatcherGroup<Route>? {
-        return .group("hubr.io") {
+        return .host("hubr.io") {
             $0.map("tab2/home") { .tab2Home }
         }
     }

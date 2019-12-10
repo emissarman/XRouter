@@ -43,7 +43,7 @@ extension RouterError: LocalizedError {
             """
         case let .missingRequiredPathParameter(name):
             return """
-            Missing required paramter \"\(name)\" while unwrapping URL route.
+            Missing required path parameter \"\(name)\" while unwrapping URL route.
             """
         case .missingSourceViewController:
             return """

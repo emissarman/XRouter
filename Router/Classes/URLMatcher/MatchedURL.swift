@@ -6,22 +6,27 @@
 import Foundation
 
 /**
- A URL that has been matched to a registered `RouteType` route.
+ Represents a URL that has been matched to a registered route.
  
- Used for shortcuts when mapping registered URLs routes.
+ Provides parameter mapping shortcuts.
  
  - Note: For use when handling routing parameters.
  - See: `RouteType.registerURLs(...)`
  
  Usage:
  ```swift
- // Path parameters
- let str: String = try $0.param("myParam")
- let int: Int = try $0.param("id")
+ // Path components
+ let name: String = try $0.path("name")
+ let pageId: Int = try $0.path("id")
  
  // Query string parameters
- let str: String? = $0.query("myParam")
- let int: Int? = $0.query("myParam")
+ let all: [String: String] = $0.queryParameters
+ let offset: String? = $0.query("offset")
+ let page = $0.query("page") ?? 0
+ 
+ // URL Host/Scheme
+ let host: String? = $0.host
+ let scheme: String? = $0.scheme
  ```
  */
 public class MatchedURL {
@@ -30,7 +35,7 @@ public class MatchedURL {
     public let rawURL: URL
     
     /// Query string parameter shortcuts
-    private lazy var queryItems: [String: String] = {
+    public lazy var queryParameters: [String: String] = {
         var queryItems = [String: String]()
         
         if let parts = URLComponents(url: rawURL, resolvingAgainstBaseURL: false),
@@ -45,45 +50,51 @@ public class MatchedURL {
         return queryItems
     }()
     
+    /// Get the scheme (e.g. "https")
+    public lazy var scheme: String? = rawURL.scheme
+    
+    /// Get the host (e.g. "example.com")
+    public lazy var host: String? = rawURL.host
+    
     /// Path parameters storage
-    private let parameters: [String: String]
+    private let pathParameters: [String: String]
     
     /// Initialiser
-    internal init(for url: URL, namedParameters: [String: String]) {
+    internal init(for url: URL, pathParameters: [String: String]) {
         self.rawURL = url
-        self.parameters = namedParameters
+        self.pathParameters = pathParameters
     }
     
     // MARK: - Methods
     
-    /// Retrieve a named parameter as a `String`
-    public func param(_ name: String) throws -> String {
-        if let parameter = parameters[name] {
-            return parameter
+    /// Retrieve a path parameter as a `String`
+    public func path(_ name: String) throws -> String {
+        if let pathParameter = pathParameters[name] {
+            return pathParameter
         }
         
         throw RouterError.missingRequiredPathParameter(parameter: name)
     }
     
-    /// Retrieve a named parameter as an `Int`
-    public func param(_ name: String) throws -> Int {
-        let stringParam: String = try param(name)
+    /// Retrieve a path parameter as an `Int`
+    public func path(_ name: String) throws -> Int {
+        let stringParameter: String = try path(name)
         
-        if let intParam = Int(stringParam) {
-            return intParam
+        if let intParameter = Int(stringParameter) {
+            return intParameter
         }
         
-        throw RouterError.requiredIntegerParameterWasNotAnInteger(parameter: name, stringValue: stringParam)
+        throw RouterError.requiredIntegerParameterWasNotAnInteger(parameter: name, stringValue: stringParameter)
     }
     
     /// Retrieve a query string parameter as a `String`
     public func query(_ name: String) -> String? {
-        return queryItems[name]
+        return queryParameters[name]
     }
     
     /// Retrieve a query string parameter as an `Int`
     public func query(_ name: String) -> Int? {
-        if let queryItem = queryItems[name] {
+        if let queryItem = queryParameters[name] {
             return Int(queryItem)
         }
         

@@ -36,7 +36,7 @@ public protocol RouteType: Equatable {
     /// ```
     /// return .group(["website.com", "sales.website.com"]) {
     ///     $0.map("products") { .allProducts(page: $0.query("page") ?? 0) }
-    ///     $0.map("products/{category}/") { try .productsShowcase(category: $0.param("category")) }
+    ///     $0.map("products/{category}/") { try .productsShowcase(category: $0.path("category")) }
     ///     $0.map("user/*/logout") { .userLogout }
     /// }
     /// ```
