@@ -2,6 +2,12 @@
 
 Notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [v2.0.0](https://github.com/hubrioAU/XRouter/releases/tag/2.0.0)
+- ([#31](https://github.com/hubrioAU/XRouter/pull/31)): Add wildcard host/scheme matching to URL matcher, rename param to path
+- ([#31](https://github.com/hubrioAU/XRouter/pull/31)): Update RouteTransitions
+  - Update `RouteTransition.push` behaviour, removed `RouteTransition.set` and added `RouteTransition.replace`
+  - Renamed `RouteTransition.inferred` to `RouteTransition.automatic`
+
 # [v1.4.1](https://github.com/hubrioAU/XRouter/releases/tag/1.4.1)
 - ([#29](https://github.com/hubrioAU/XRouter/pull/29)): Renamed the XRouter method `prepareForNavigation(to:)` to `viewController(for:)` to be a little more explicit about what it's role is.
 - refactored `received(unhandledError:)`.

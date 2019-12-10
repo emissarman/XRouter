@@ -1,11 +1,10 @@
 Pod::Spec.new do |s|
   s.name             = 'XRouter'
-  s.version          = '1.4.1'
+  s.version          = '2.0.0'
   s.summary          = 'Navigate anywhere in just one line.'
 
   s.description      = <<-DESC
-A simple routing library for iOS.
-Setup routes and map them to controllers, easy peasy.
+Navigate anywhere in just one line.
                        DESC
 
   s.homepage         = 'https://github.com/hubrioAU/XRouter'
