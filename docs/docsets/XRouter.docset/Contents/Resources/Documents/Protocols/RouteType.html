@@ -63,6 +63,9 @@
               <li class="nav-group-task">
                 <a href="../Enums/RouterError.html">RouterError</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Enums/StringMatcher.html">StringMatcher</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -86,6 +89,14 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Structs/URLMatcherGroup.html">URLMatcherGroup</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:7XRouter17TransitionClosurea">TransitionClosure</a>
               </li>
             </ul>
           </li>
@@ -119,9 +130,11 @@
               <div class="task-name-container">
                 <a name="/Properties"></a>
                 <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Properties"></a>
+                  <h3 class="section-name"><p>Properties</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -205,9 +218,11 @@
               <div class="task-name-container">
                 <a name="/Methods"></a>
                 <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
-                <a href="#/Methods">
-                  <h3 class="section-name">Methods</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Methods"></a>
+                  <h3 class="section-name"><p>Methods</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -231,7 +246,7 @@
 <p>Example:</p>
 <pre class="highlight swift"><code><span class="k">return</span> <span class="o">.</span><span class="nf">group</span><span class="p">([</span><span class="s">"website.com"</span><span class="p">,</span> <span class="s">"sales.website.com"</span><span class="p">])</span> <span class="p">{</span>
     <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"products"</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span><span class="nf">allProducts</span><span class="p">(</span><span class="nv">page</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="s">"page"</span><span class="p">)</span> <span class="p">??</span> <span class="mi">0</span><span class="p">)</span> <span class="p">}</span>
-    <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"products/{category}/"</span><span class="p">)</span> <span class="p">{</span> <span class="k">try</span> <span class="o">.</span><span class="nf">productsShowcase</span><span class="p">(</span><span class="nv">category</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">param</span><span class="p">(</span><span class="s">"category"</span><span class="p">))</span> <span class="p">}</span>
+    <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"products/{category}/"</span><span class="p">)</span> <span class="p">{</span> <span class="k">try</span> <span class="o">.</span><span class="nf">productsShowcase</span><span class="p">(</span><span class="nv">category</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">path</span><span class="p">(</span><span class="s">"category"</span><span class="p">))</span> <span class="p">}</span>
     <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"user/*/logout"</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span><span class="n">userLogout</span> <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
@@ -259,9 +274,11 @@
               <div class="task-name-container">
                 <a name="/Equatable"></a>
                 <a name="//apple_ref/swift/Section/Equatable" class="dashAnchor"></a>
-                <a href="#/Equatable">
-                  <h3 class="section-name">Equatable</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Equatable"></a>
+                  <h3 class="section-name"><p>Equatable</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -300,9 +317,11 @@
               <div class="task-name-container">
                 <a name="/Computed%20properties"></a>
                 <a name="//apple_ref/swift/Section/Computed properties" class="dashAnchor"></a>
-                <a href="#/Computed%20properties">
-                  <h3 class="section-name">Computed properties</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Computed%20properties"></a>
+                  <h3 class="section-name"><p>Computed properties</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -321,7 +340,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Route name. Example: <code>myProfileView(withID: Int)</code> becomes <q>myProfileView</q></p>
+                        <p>Route name. Example: <code>myProfileView(withID: Int)</code> becomes &ldquo;myProfileView&rdquo;</p>
 
                       </div>
                       <div class="declaration">
@@ -341,7 +360,7 @@
         </section>
         <section id="footer">
           <p>MIT License</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

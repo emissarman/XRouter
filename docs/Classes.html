@@ -63,6 +63,9 @@
               <li class="nav-group-task">
                 <a href="Enums/RouterError.html">RouterError</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Enums/StringMatcher.html">StringMatcher</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -86,6 +89,14 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Structs/URLMatcherGroup.html">URLMatcherGroup</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:7XRouter17TransitionClosurea">TransitionClosure</a>
               </li>
             </ul>
           </li>
@@ -134,10 +145,6 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -163,17 +170,14 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RouteTransition</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RouteTransition</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">RouteTransition</span><span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -204,10 +208,6 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -221,28 +221,32 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A URL that has been matched to a registered <code><a href="Protocols/RouteType.html">RouteType</a></code> route.</p>
+                        <p>Represents a URL that has been matched to a registered route.</p>
 
-<p>Used for shortcuts when mapping registered URLs routes.</p>
+<p>Provides parameter mapping shortcuts.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     For use when handling routing parameters.
 
-</div>
-<div class="aside aside-see">
+</div><div class="aside aside-see">
     <p class="aside-title">See</p>
     <code><a href="Protocols/RouteType.html#/s:7XRouter9RouteTypeP12registerURLsAA15URLMatcherGroupVyxGSgyFZ">RouteType.registerURLs(...)</a></code>
 
 </div>
 
 <p>Usage:</p>
-<pre class="highlight swift"><code><span class="c1">// Path parameters</span>
-<span class="k">let</span> <span class="nv">str</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="k">try</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">param</span><span class="p">(</span><span class="s">"myParam"</span><span class="p">)</span>
-<span class="k">let</span> <span class="nv">int</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="k">try</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">param</span><span class="p">(</span><span class="s">"id"</span><span class="p">)</span>
+<pre class="highlight swift"><code><span class="c1">// Path components</span>
+<span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="k">try</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">path</span><span class="p">(</span><span class="s">"name"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">pageId</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="k">try</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">path</span><span class="p">(</span><span class="s">"id"</span><span class="p">)</span>
 
 <span class="c1">// Query string parameters</span>
-<span class="k">let</span> <span class="nv">str</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="s">"myParam"</span><span class="p">)</span>
-<span class="k">let</span> <span class="nv">int</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="s">"myParam"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">all</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">queryParameters</span>
+<span class="k">let</span> <span class="nv">offset</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="s">"offset"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">page</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="s">"page"</span><span class="p">)</span> <span class="p">??</span> <span class="mi">0</span>
+
+<span class="c1">// URL Host/Scheme</span>
+<span class="k">let</span> <span class="nv">host</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">host</span>
+<span class="k">let</span> <span class="nv">scheme</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">scheme</span>
 </code></pre>
 
                         <a href="Classes/MatchedURL.html" class="slightly-smaller">See more</a>
@@ -258,10 +262,6 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -297,10 +297,6 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -314,7 +310,7 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Represents a list of URL mappings for a set of paths on some host(s).</p>
+                        <p>Represents a list of URL mappings for a set of paths on some host(s)/scheme(s).</p>
 
                         <a href="Classes/URLMatcher.html" class="slightly-smaller">See more</a>
                       </div>
@@ -329,10 +325,6 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -358,7 +350,7 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
 <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"/users"</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span><span class="n">allUsers</span> <span class="p">}</span>
 
 <span class="c1">// Dynamic path</span>
-<span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"/users/{id}/profile"</span><span class="p">)</span> <span class="p">{</span> <span class="k">try</span> <span class="o">.</span><span class="nf">profile</span><span class="p">(</span><span class="nv">withID</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">param</span><span class="p">(</span><span class="s">"id"</span><span class="p">))</span> <span class="p">}</span>
+<span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"/users/{id}/profile"</span><span class="p">)</span> <span class="p">{</span> <span class="k">try</span> <span class="o">.</span><span class="nf">profile</span><span class="p">(</span><span class="nv">withID</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">path</span><span class="p">(</span><span class="s">"id"</span><span class="p">))</span> <span class="p">}</span>
 </code></pre>
 
                         <a href="Classes/URLPathMapper.html" class="slightly-smaller">See more</a>
@@ -380,7 +372,7 @@ methods <code>prepareForTransition(to:)</code> and <code>transition(for:)</code>
         </section>
         <section id="footer">
           <p>MIT License</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

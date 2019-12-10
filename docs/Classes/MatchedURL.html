@@ -63,6 +63,9 @@
               <li class="nav-group-task">
                 <a href="../Enums/RouterError.html">RouterError</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Enums/StringMatcher.html">StringMatcher</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -89,6 +92,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:7XRouter17TransitionClosurea">TransitionClosure</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -101,28 +112,32 @@
 
                 </div>
               </div>
-            <p>A URL that has been matched to a registered <code><a href="../Protocols/RouteType.html">RouteType</a></code> route.</p>
+            <p>Represents a URL that has been matched to a registered route.</p>
 
-<p>Used for shortcuts when mapping registered URLs routes.</p>
+<p>Provides parameter mapping shortcuts.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     For use when handling routing parameters.
 
-</div>
-<div class="aside aside-see">
+</div><div class="aside aside-see">
     <p class="aside-title">See</p>
     <code><a href="../Protocols/RouteType.html#/s:7XRouter9RouteTypeP12registerURLsAA15URLMatcherGroupVyxGSgyFZ">RouteType.registerURLs(...)</a></code>
 
 </div>
 
 <p>Usage:</p>
-<pre class="highlight swift"><code><span class="c1">// Path parameters</span>
-<span class="k">let</span> <span class="nv">str</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="k">try</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">param</span><span class="p">(</span><span class="s">"myParam"</span><span class="p">)</span>
-<span class="k">let</span> <span class="nv">int</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="k">try</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">param</span><span class="p">(</span><span class="s">"id"</span><span class="p">)</span>
+<pre class="highlight swift"><code><span class="c1">// Path components</span>
+<span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="k">try</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">path</span><span class="p">(</span><span class="s">"name"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">pageId</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="k">try</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">path</span><span class="p">(</span><span class="s">"id"</span><span class="p">)</span>
 
 <span class="c1">// Query string parameters</span>
-<span class="k">let</span> <span class="nv">str</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="s">"myParam"</span><span class="p">)</span>
-<span class="k">let</span> <span class="nv">int</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="s">"myParam"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">all</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">queryParameters</span>
+<span class="k">let</span> <span class="nv">offset</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="s">"offset"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">page</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="s">"page"</span><span class="p">)</span> <span class="p">??</span> <span class="mi">0</span>
+
+<span class="c1">// URL Host/Scheme</span>
+<span class="k">let</span> <span class="nv">host</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">host</span>
+<span class="k">let</span> <span class="nv">scheme</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">scheme</span>
 </code></pre>
 
           </section>
@@ -156,23 +171,12 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Methods"></a>
-                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
-                <a href="#/Methods">
-                  <h3 class="section-name">Methods</h3>
-                </a>
-              </div>
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7XRouter10MatchedURLC5paramyS2SKF"></a>
-                    <a name="//apple_ref/swift/Method/param(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7XRouter10MatchedURLC5paramyS2SKF">param(_:)</a>
+                    <a name="/s:7XRouter10MatchedURLC15queryParametersSDyS2SGvp"></a>
+                    <a name="//apple_ref/swift/Property/queryParameters" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter10MatchedURLC15queryParametersSDyS2SGvp">queryParameters</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -180,14 +184,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Retrieve a named parameter as a <code>String</code></p>
+                        <p>Query string parameter shortcuts</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">param</span><span class="p">(</span><span class="n">_</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">queryParameters</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -197,9 +201,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7XRouter10MatchedURLC5paramySiSSKF"></a>
-                    <a name="//apple_ref/swift/Method/param(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7XRouter10MatchedURLC5paramySiSSKF">param(_:)</a>
+                    <a name="/s:7XRouter10MatchedURLC6schemeSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/scheme" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter10MatchedURLC6schemeSSSgvp">scheme</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -207,14 +211,108 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Retrieve a named parameter as an <code>Int</code></p>
+                        <p>Get the scheme (e.g. &ldquo;https&rdquo;)</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">param</span><span class="p">(</span><span class="n">_</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">scheme</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7XRouter10MatchedURLC4hostSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/host" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter10MatchedURLC4hostSSSgvp">host</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get the host (e.g. &ldquo;example.com&rdquo;)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">host</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Methods"></a>
+                  <h3 class="section-name"><p>Methods</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7XRouter10MatchedURLC4pathyS2SKF"></a>
+                    <a name="//apple_ref/swift/Method/path(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter10MatchedURLC4pathyS2SKF">path(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieve a path parameter as a <code>String</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">path</span><span class="p">(</span><span class="n">_</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7XRouter10MatchedURLC4pathySiSSKF"></a>
+                    <a name="//apple_ref/swift/Method/path(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter10MatchedURLC4pathySiSSKF">path(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieve a path parameter as an <code>Int</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">path</span><span class="p">(</span><span class="n">_</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -281,7 +379,7 @@
         </section>
         <section id="footer">
           <p>MIT License</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

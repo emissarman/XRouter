@@ -62,6 +62,9 @@
               <li class="nav-group-task">
                 <a href="Enums/RouterError.html">RouterError</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Enums/StringMatcher.html">StringMatcher</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -88,6 +91,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:7XRouter17TransitionClosurea">TransitionClosure</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -104,8 +115,7 @@
 <a href="https://hubrioau.github.io/XRouter"><img src="https://raw.githubusercontent.com/hubrioAU/XRouter/master/docs/badge.svg?sanitize=true" alt="Docs Badge"></a>
 <a href="https://cocoapods.org/pods/XRouter"><img src="https://img.shields.io/cocoapods/v/XRouter.svg?style=flat" alt="Version"></a>
 <a href="https://cocoapods.org/pods/XRouter"><img src="https://img.shields.io/cocoapods/l/XRouter.svg?style=flat" alt="License"></a>
-<a href="https://cocoapods.org/pods/XRouter"><img src="https://img.shields.io/cocoapods/p/XRouter.svg?style=flat" alt="Platform"></a>
-<a href="https://swift.org"><img src="https://img.shields.io/badge/language-Swift-ed5036.svg" alt="Language"></a></p>
+<a href="https://swift.org"><img src="https://img.shields.io/badge/RxSwift-compatible-blueviolet.svg" alt="Language"></a></p>
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/hubrioau/XRouter/master/XRouter.jpg?17-Mar" alt="XRouter" width="400" style="max-width:400px;width:auto;height:auto;"/>
@@ -113,10 +123,7 @@
 <h2 id='basic-usage' class='heading'>Basic Usage</h2>
 <h3 id='configure' class='heading'>Configure</h3>
 <h4 id='define-routes' class='heading'>Define Routes</h4>
-<pre class="highlight swift"><code><span class="cm">/**
- Routes
- */</span>
-<span class="kd">enum</span> <span class="kt">Route</span><span class="p">:</span> <span class="kt">RouteType</span> <span class="p">{</span>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">AppRoute</span><span class="p">:</span> <span class="kt">RouteType</span> <span class="p">{</span>
     <span class="k">case</span> <span class="n">newsfeed</span>
     <span class="k">case</span> <span class="n">login</span>
     <span class="k">case</span> <span class="n">signup</span>
@@ -124,13 +131,9 @@
 <span class="p">}</span>
 </code></pre>
 <h4 id='create-router' class='heading'>Create Router</h4>
-<pre class="highlight swift"><code><span class="cm">/**
- Router
- */</span>
-<span class="kd">class</span> <span class="kt">Router</span><span class="p">:</span> <span class="kt">XRouter</span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">Router</span><span class="p">:</span> <span class="kt">XRouter</span><span class="o">&lt;</span><span class="kt">AppRoute</span><span class="o">&gt;</span> <span class="p">{</span>
 
-    <span class="c1">/// Configure the view controller for the route.</span>
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewController</span><span class="p">(</span><span class="k">for</span> <span class="nv">route</span><span class="p">:</span> <span class="kt">Route</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">prepareDestination</span><span class="p">(</span><span class="k">for</span> <span class="nv">route</span><span class="p">:</span> <span class="kt">AppRoute</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">UIViewController</span> <span class="p">{</span>
         <span class="k">switch</span> <span class="n">route</span> <span class="p">{</span>
         <span class="k">case</span> <span class="o">.</span><span class="nv">newsfeed</span><span class="p">:</span> <span class="k">return</span> <span class="n">newsfeedController</span><span class="o">.</span><span class="n">rootViewController</span>
         <span class="k">case</span> <span class="o">.</span><span class="nv">login</span><span class="p">:</span> <span class="k">return</span> <span class="kt">LoginFlowCoordinator</span><span class="p">()</span><span class="o">.</span><span class="nf">start</span><span class="p">()</span>
@@ -143,7 +146,7 @@
 </code></pre>
 <h4 id='use-router' class='heading'>Use Router</h4>
 <pre class="highlight swift"><code><span class="c1">// Navigate directly to a route</span>
-<span class="n">router</span><span class="o">.</span><span class="nf">navigate</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="o">.</span><span class="n">newsfeed</span><span class="p">)</span>
+<span class="n">router</span><span class="o">.</span><span class="nf">navigate</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="o">.</span><span class="nf">profile</span><span class="p">(</span><span class="mi">3355</span><span class="p">))</span>
 
 <span class="c1">// Open a URL</span>
 <span class="n">router</span><span class="o">.</span><span class="nf">openURL</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -155,44 +158,23 @@
 <pre class="highlight swift"><code><span class="n">router</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="nf">navigate</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="o">.</span><span class="n">loginFlow</span><span class="p">)</span> <span class="c1">// -&gt; Completable</span>
 <span class="n">router</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="nf">openURL</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="c1">// -&gt; Single&lt;Bool&gt;</span>
 </code></pre>
-<h3 id='transitions' class='heading'>Transitions</h3>
-
-<p>XRouter supports manually defining transitions.</p>
-<pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">Router</span><span class="p">:</span> <span class="kt">XRouter</span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span> <span class="p">{</span>
-
-    <span class="c1">/// Set the transition for routes.</span>
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">transition</span><span class="p">(</span><span class="k">for</span> <span class="nv">route</span><span class="p">:</span> <span class="kt">Route</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">RouteTransition</span> <span class="p">{</span>
-        <span class="k">switch</span> <span class="n">route</span> <span class="p">{</span>
-        <span class="k">case</span> <span class="o">.</span><span class="nv">newsfeed</span><span class="p">:</span> <span class="k">return</span> <span class="o">.</span><span class="k">set</span>     <span class="cm">/* Uses UINavigationController(_:).setViewControllers(...) */</span>
-        <span class="k">case</span> <span class="o">.</span><span class="nv">profile</span><span class="p">:</span> <span class="k">return</span> <span class="o">.</span><span class="n">modal</span>    <span class="cm">/* Uses UIViewController(_:).present(...) */</span>
-        <span class="k">case</span> <span class="k">default</span><span class="p">:</span> <span class="k">return</span> <span class="o">.</span><span class="n">inferred</span>  <span class="cm">/* Default. Use appropriate transition based on context. */</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-<span class="p">}</span>
-</code></pre>
-
-<p>See <em>Custom Transitions</em> for details about how you can easily create and use custom transitions.</p>
-<h4 id='url-support' class='heading'>URL Support</h4>
+<h4 id='deep-links-support' class='heading'>Deep Links Support</h4>
 
 <p>XRouter provides support for deep links and universal links.</p>
 
 <p>You only need to do one thing to add URL support for your routes.
 Implement the static method <code>registerURLs</code>:</p>
-<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">Route</span><span class="p">:</span> <span class="kt">RouteType</span> <span class="p">{</span>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">AppRoute</span><span class="p">:</span> <span class="kt">RouteType</span> <span class="p">{</span>
 
-    <span class="c1">/// Register URL host and path groups to map to routes.</span>
+    <span class="c1">/// Register URL mapping rules.</span>
     <span class="kd">static</span> <span class="kd">func</span> <span class="nf">registerURLs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">URLMatcherGroup</span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span><span class="p">?</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="o">.</span><span class="nf">group</span><span class="p">(</span><span class="s">"store.example.com"</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"products"</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span><span class="n">allProducts</span> <span class="p">}</span>
-            <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"user/*/logout"</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span><span class="n">logout</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="o">.</span><span class="n">group</span> <span class="p">{</span>
+            <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"/products"</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span><span class="n">allProducts</span> <span class="p">}</span>
+            <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"/user/*/logout"</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span><span class="n">logout</span> <span class="p">}</span>
+            <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"/products/{category}/view"</span><span class="p">)</span> <span class="p">{</span> <span class="k">try</span> <span class="o">.</span><span class="nf">products</span><span class="p">(</span><span class="nv">category</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">path</span><span class="p">(</span><span class="s">"category"</span><span class="p">))</span> <span class="p">}</span>
 
-            <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"products/{category}/view"</span><span class="p">)</span> <span class="p">{</span>
-              <span class="k">try</span> <span class="o">.</span><span class="nf">products</span><span class="p">(</span><span class="nv">category</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">param</span><span class="p">(</span><span class="s">"category"</span><span class="p">))</span>
-            <span class="p">}</span>
-
-            <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"user/{id}/profile"</span><span class="p">)</span> <span class="p">{</span>
-              <span class="k">try</span> <span class="o">.</span><span class="nf">viewProfile</span><span class="p">(</span><span class="nv">withID</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">param</span><span class="p">(</span><span class="s">"id"</span><span class="p">))</span>
+            <span class="nv">$0</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="s">"/user/{id}/profile"</span><span class="p">)</span> <span class="p">{</span> <span class="n">q</span> <span class="k">in</span>
+                <span class="k">try</span> <span class="o">.</span><span class="nf">viewProfile</span><span class="p">(</span><span class="nv">withID</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">path</span><span class="p">(</span><span class="s">"id"</span><span class="p">),</span> <span class="nv">parameters</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -254,17 +236,17 @@ Implement the static method <code>registerURLs</code>:</p>
 </code></pre>
 
 <p>And set the transition to your custom transition in your Router:</p>
-<pre class="highlight swift"><code>    <span class="k">override</span> <span class="kd">func</span> <span class="nf">transition</span><span class="p">(</span><span class="k">for</span> <span class="nv">route</span><span class="p">:</span> <span class="kt">Route</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">RouteTransition</span> <span class="p">{</span>
+<pre class="highlight swift"><code>    <span class="k">override</span> <span class="kd">func</span> <span class="nf">transition</span><span class="p">(</span><span class="k">for</span> <span class="nv">route</span><span class="p">:</span> <span class="kt">AppRoute</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">RouteTransition</span> <span class="p">{</span>
         <span class="k">if</span> <span class="k">case</span> <span class="kt">Route</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="n">route</span> <span class="p">{</span>
           <span class="k">return</span> <span class="n">heroCrossFade</span>
         <span class="p">}</span>
 
-        <span class="k">return</span> <span class="o">.</span><span class="n">inferred</span>
+        <span class="k">return</span> <span class="o">.</span><span class="n">automatic</span>
     <span class="p">}</span>
 </code></pre>
 <h2 id='documentation' class='heading'>Documentation</h2>
 
-<p>Complete <a href="https://hubrioau.github.io/XRouter/">documentation is available here</a>.</p>
+<p>Complete <a href="https://hubrioau.github.io/XRouter/">documentation is available here</a> and is generated using <a href="https://github.com/realm/jazzy">Jazzy</a>.</p>
 <h2 id='example' class='heading'>Example</h2>
 
 <p>To run the example project, clone the repo, and run it in Xcode 10.</p>
@@ -287,7 +269,7 @@ it, simply add the following line to your Podfile:</p>
         </section>
         <section id="footer">
           <p>MIT License</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

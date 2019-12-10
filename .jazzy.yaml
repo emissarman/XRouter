@@ -17,5 +17,5 @@ xcodebuild_arguments:
   - -scheme
   - 'XRouter'
   - -sdk
-  - 'iphonesimulator12.1'
+  - 'iphonesimulator12.2'
   - -UseModernBuildSystem=NO
