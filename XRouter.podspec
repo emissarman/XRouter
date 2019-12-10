@@ -4,7 +4,10 @@ Pod::Spec.new do |s|
   s.summary          = 'Navigate anywhere in just one line.'
 
   s.description      = <<-DESC
-Navigate anywhere in just one line.
+Decouple your controllers using abstract routing.
+
+Define application-level routes, add powerful deep-linking and stop writing
+the same boilerplate over and over.
                        DESC
 
   s.homepage         = 'https://github.com/hubrioAU/XRouter'
