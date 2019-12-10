@@ -48,9 +48,9 @@ class Router: XRouter<AppRoute> {
         case .signup:
             return SignupFlowCoordinator().start()
             
-        case .profile(let userID):
+        case let .profile(userID):
             guard let profile = profilesRepository.fetch(userId) else {
-                throw new Exception("Could not find profile with that ID.")
+                throw NotFoundError("Could not find profile with that ID.")
             }
             
             return UserProfileViewController().configured(with: profile)
