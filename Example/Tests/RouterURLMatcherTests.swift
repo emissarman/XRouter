@@ -119,9 +119,9 @@ class RouterURLMatcherTests: ReactiveTestCase {
         
         XCTAssertEqual(matcherGroup.matchers.count, 1)
         
-        let route: TestRoute! = try! matcherGroup.findMatch(forURL: URL(string: "wrongscheme://host/my/cool/route")!)
+        let route: TestRoute? = try! matcherGroup.findMatch(forURL: URL(string: "wrongscheme://host/my/cool/route")!)
         
-        XCTAssertEqual(route, .exampleStaticRoute)
+        XCTAssertNil(route)
     }
     
     /// Test dynamic string routes
