@@ -1,6 +1,7 @@
 # XRouter
 
-Navigate anywhere in just one line.
+Decouple your code with abstract routing.
+Define app-level destinations, add powerful deep-linking and stop writing the same boilerplate over and over.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d0ef88b70fc843adb2944ce0d956269d)](https://app.codacy.com/app/hubrioAU/XRouter?utm_source=github.com&utm_medium=referral&utm_content=hubrioAU/XRouter&utm_campaign=Badge_Grade_Dashboard)
 [![CodeCov Badge](https://codecov.io/gh/hubrioAU/XRouter/branch/master/graph/badge.svg)](https://codecov.io/gh/hubrioau/XRouter)
@@ -14,10 +15,14 @@ Navigate anywhere in just one line.
 <img src="https://raw.githubusercontent.com/hubrioau/XRouter/master/XRouter.jpg?17-Mar" alt="XRouter" width="400" style="max-width:400px;width:auto;height:auto;"/>
 </p>
 
-## Basic Usage
-### Configure
+## Get Started
 
-#### Define Routes
+It's very easy to get started.
+
+### Configuration
+
+#### 1. Define AppRoutes
+Create an `AppRoutes.swift` file.
 ```swift
 enum AppRoute: RouteType {
     case newsfeed
@@ -27,29 +32,38 @@ enum AppRoute: RouteType {
 }
 ```
 
-#### Create Router
+#### 2. Configure Destinations
+Extend a concrete Router instance to resolve your view controllers.
 ```swift
 class Router: XRouter<AppRoute> {
 
     override func prepareDestination(for route: AppRoute) throws -> UIViewController {
         switch route {
-        case .newsfeed: return newsfeedController.rootViewController
-        case .login: return LoginFlowCoordinator().start()
-        case .signup: return SignupFlowCoordinator().start()
-        case .profile(let userID): return UserProfileViewController(withID: userID)
+        case .newsfeed: return
+            newsfeedController.rootViewController
+            
+        case .login:
+            return LoginFlowCoordinator().start()
+            
+        case .signup:
+            return SignupFlowCoordinator().start()
+            
+        case .profile(let userID):
+            guard let profile = profilesRepository.fetch(userId) else {
+                throw new Exception("Could not find profile with that ID.")
+            }
+            
+            return UserProfileViewController().configured(with: profile)
         }
     }
     
 }
 ```
 
-#### Use Router
+#### 3. Use Router
 ```swift
 // Navigate directly to a route
 router.navigate(to: .profile(3355))
-
-// Open a URL
-router.openURL(url)
 ```
 
 ### Advanced Usage
