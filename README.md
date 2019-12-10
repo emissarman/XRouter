@@ -61,7 +61,7 @@ router.rx.navigate(to: .loginFlow) // -> Completable
 router.rx.openURL(url) // -> Single<Bool>
 ```
 
-#### Deep Links Support
+#### Deep Link Support
 
 XRouter provides support for deep links and universal links.
 
@@ -70,14 +70,13 @@ Implement the static method `registerURLs`:
 ```swift
 enum AppRoute: RouteType {
 
-    /// Register URL mapping rules.
     static func registerURLs() -> URLMatcherGroup<Route>? {
         return .group {
             $0.map("/products") { .allProducts }
             $0.map("/user/*/logout") { .logout }
-            $0.map("/products/{category}/view") { try .products(category: $0.path("category")) }
+            $0.map("/products/{cat}/view") { try .products(category: $0.path("cat")) }
             
-            $0.map("/user/{id}/profile") { q in
+            $0.map("/user/{id}/profile") {
                 try .viewProfile(withID: $0.path("id"), parameters: $0.query)
             }
         }
@@ -98,6 +97,36 @@ extension AppDelegate {
     /// Handle universal links.
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return router.continue(userActivity)
+    }
+
+}
+```
+
+You can even define more advanced URL routing. For example, these rules could be used to match:
+
+* `http://example.com/login` --> `.login`
+* `https://example.com/signup` --> `.signup`
+* `customScheme://myApp/qr-code?code=abcdef...` --> `.openQRCode("abcdef...")`
+* `https://www.example.com/products` --> `.allProducts`
+* `https://api.example.com/user/my-user-name/logout` --> `.logout`
+
+```swift
+enum AppRoute: RouteType {
+
+    static func registerURLs() -> URLMatcherGroup<AppRoute>? {
+        return .init(matchers: [
+            .host("example.com") {
+                $0.map("/login") { .login }
+                $0.map("/signup") { .signup }
+            },
+            .scheme("customScheme") {
+                $0.map("/qr-code") { .openQRCode($0.query("code")) }
+            },
+            .group {
+                $0.map("/products") { .allProducts }
+                $0.map("/user/*/logout") { .logout }
+            }
+        ])
     }
 
 }
