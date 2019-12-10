@@ -16,7 +16,7 @@ import Foundation
  $0.map("/users") { .allUsers }
  
  // Dynamic path
- $0.map("/users/{id}/profile") { try .profile(withID: $0.param("id")) }
+ $0.map("/users/{id}/profile") { try .profile(withID: $0.path("id")) }
  */
 public class URLPathMapper<Route: RouteType> {
     
@@ -74,7 +74,7 @@ public class URLPathMapper<Route: RouteType> {
     /// - Returns: A matched routable link
     private func match(_ pattern: PathPattern, _ url: URL) -> MatchedURL? {
         let pathComponents = url.pathComponents.compactMap { $0 == "/" ? nil : $0 }
-        var parameters = [String: String]()
+        var pathParameters = [String: String]()
         
         for (index, patternComponent) in pattern.components.enumerated() {
             guard let pathComponent = pathComponents[safe: index],
@@ -84,11 +84,11 @@ public class URLPathMapper<Route: RouteType> {
             
             // Store the parameters
             if case let .parameter(name) = patternComponent {
-                parameters[name] = pathComponent
+                pathParameters[name] = pathComponent
             }
         }
         
-        return MatchedURL(for: url, namedParameters: parameters)
+        return .init(for: url, pathParameters: pathParameters)
     }
     
 }

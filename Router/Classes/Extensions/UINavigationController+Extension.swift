@@ -10,12 +10,12 @@ import UIKit
  Source: https://stackoverflow.com/a/33767837
  Author: https://stackoverflow.com/users/312594/par
  */
-extension UINavigationController {
+internal extension UINavigationController {
     
     /// Push view controllers with completion closure
-    internal func pushViewController(_ viewController: UIViewController,
-                                     animated: Bool,
-                                     completion: @escaping () -> Void) {
+    func pushViewController(_ viewController: UIViewController,
+                            animated: Bool,
+                            completion: @escaping () -> Void) {
         pushViewController(viewController, animated: animated)
         
         guard animated, let coordinator = transitionCoordinator else {
@@ -29,9 +29,9 @@ extension UINavigationController {
     }
     
     /// Set view controllers with completion closure
-    internal func setViewControllers(_ viewControllers: [UIViewController],
-                                     animated: Bool,
-                                     completion: @escaping () -> Void) {
+    func setViewControllers(_ viewControllers: [UIViewController],
+                            animated: Bool,
+                            completion: @escaping () -> Void) {
         setViewControllers(viewControllers, animated: animated)
         
         guard animated, let coordinator = transitionCoordinator else {

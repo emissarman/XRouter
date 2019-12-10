@@ -8,8 +8,6 @@ Navigate anywhere in just one line.
 [![Docs Badge](https://raw.githubusercontent.com/hubrioAU/XRouter/master/docs/badge.svg?sanitize=true)](https://hubrioau.github.io/XRouter)
 [![Version](https://img.shields.io/cocoapods/v/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
 [![License](https://img.shields.io/cocoapods/l/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
-[![Platform](https://img.shields.io/cocoapods/p/XRouter.svg?style=flat)](https://cocoapods.org/pods/XRouter)
-[![Language](https://img.shields.io/badge/language-Swift-ed5036.svg)](https://swift.org)
 [![Language](https://img.shields.io/badge/RxSwift-compatible-blueviolet.svg)](https://swift.org)
 
 <p align="center">
@@ -21,10 +19,7 @@ Navigate anywhere in just one line.
 
 #### Define Routes
 ```swift
-/**
- Routes
- */
-enum Route: RouteType {
+enum AppRoute: RouteType {
     case newsfeed
     case login
     case signup
@@ -34,13 +29,9 @@ enum Route: RouteType {
 
 #### Create Router
 ```swift
-/**
- Router
- */
-class Router: XRouter<Route> {
+class Router: XRouter<AppRoute> {
 
-    /// Configure the view controller for the route.
-    override func viewController(for route: Route) throws -> UIViewController {
+    override func prepareDestination(for route: AppRoute) throws -> UIViewController {
         switch route {
         case .newsfeed: return newsfeedController.rootViewController
         case .login: return LoginFlowCoordinator().start()
@@ -48,14 +39,14 @@ class Router: XRouter<Route> {
         case .profile(let userID): return UserProfileViewController(withID: userID)
         }
     }
-
+    
 }
 ```
 
 #### Use Router
 ```swift
 // Navigate directly to a route
-router.navigate(to: .newsfeed)
+router.navigate(to: .profile(3355))
 
 // Open a URL
 router.openURL(url)
@@ -70,45 +61,24 @@ router.rx.navigate(to: .loginFlow) // -> Completable
 router.rx.openURL(url) // -> Single<Bool>
 ```
 
-### Transitions
-XRouter supports manually defining transitions.
-```swift
-class Router: XRouter<Route> {
-
-    /// Set the transition for routes.
-    override func transition(for route: Route) -> RouteTransition {
-        switch route {
-        case .newsfeed: return .set     /* Uses UINavigationController(_:).setViewControllers(...) */
-        case .profile: return .modal    /* Uses UIViewController(_:).present(...) */
-        case default: return .inferred  /* Default. Use appropriate transition based on context. */
-        }
-    }
-    
-}
-```
-See _Custom Transitions_ for details about how you can easily create and use custom transitions.
-
-#### URL Support
+#### Deep Links Support
 
 XRouter provides support for deep links and universal links.
 
 You only need to do one thing to add URL support for your routes.
 Implement the static method `registerURLs`:
 ```swift
-enum Route: RouteType {
+enum AppRoute: RouteType {
 
-    /// Register URL host and path groups to map to routes.
+    /// Register URL mapping rules.
     static func registerURLs() -> URLMatcherGroup<Route>? {
-        return .group("store.example.com") {
-            $0.map("products") { .allProducts }
-            $0.map("user/*/logout") { .logout }
-
-            $0.map("products/{category}/view") {
-              try .products(category: $0.param("category"))
-            }
-
-            $0.map("user/{id}/profile") {
-              try .viewProfile(withID: $0.param("id"))
+        return .group {
+            $0.map("/products") { .allProducts }
+            $0.map("/user/*/logout") { .logout }
+            $0.map("/products/{category}/view") { try .products(category: $0.path("category")) }
+            
+            $0.map("/user/{id}/profile") { q in
+                try .viewProfile(withID: $0.path("id"), parameters: $0.query)
             }
         }
     }
@@ -178,18 +148,18 @@ Define your custom transitions:
 
 And set the transition to your custom transition in your Router:
 ```swift
-    override func transition(for route: Route) -> RouteTransition {
+    override func transition(for route: AppRoute) -> RouteTransition {
         if case Route.profile = route {
           return heroCrossFade
         }
 
-        return .inferred
+        return .automatic
     }
 ```
 
 ## Documentation
 
-Complete [documentation is available here](https://hubrioau.github.io/XRouter/).
+Complete [documentation is available here](https://hubrioau.github.io/XRouter/) and is generated using [Jazzy](https://github.com/realm/jazzy).
 
 ## Example
 

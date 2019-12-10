@@ -63,6 +63,9 @@
               <li class="nav-group-task">
                 <a href="../Enums/RouterError.html">RouterError</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Enums/StringMatcher.html">StringMatcher</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -89,6 +92,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:7XRouter17TransitionClosurea">TransitionClosure</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -109,9 +120,11 @@
               <div class="task-name-container">
                 <a name="/Properties"></a>
                 <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Properties"></a>
+                  <h3 class="section-name"><p>Properties</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -147,17 +160,73 @@
               <div class="task-name-container">
                 <a name="/Helper%20methods"></a>
                 <a name="//apple_ref/swift/Section/Helper methods" class="dashAnchor"></a>
-                <a href="#/Helper%20methods">
-                  <h3 class="section-name">Helper methods</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Helper%20methods"></a>
+                  <h3 class="section-name"><p>Helper methods</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7XRouter15URLMatcherGroupV5groupyACyxGSaySSG_yAA13URLPathMapperCyxGXEtFZ"></a>
-                    <a name="//apple_ref/swift/Method/group(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7XRouter15URLMatcherGroupV5groupyACyxGSaySSG_yAA13URLPathMapperCyxGXEtFZ">group(_:_:)</a>
+                    <a name="/s:7XRouter15URLMatcherGroupV4hostyACyxGSS_yAA13URLPathMapperCyxGXEtFZ"></a>
+                    <a name="//apple_ref/swift/Method/host(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter15URLMatcherGroupV4hostyACyxGSS_yAA13URLPathMapperCyxGXEtFZ">host(_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Match some host.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">host</span><span class="p">(</span><span class="n">_</span> <span class="nv">host</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">_</span> <span class="nv">mapPathsClosure</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Classes/URLPathMapper.html">URLPathMapper</a></span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLMatcherGroup</span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7XRouter15URLMatcherGroupV6schemeyACyxGSS_yAA13URLPathMapperCyxGXEtFZ"></a>
+                    <a name="//apple_ref/swift/Method/scheme(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter15URLMatcherGroupV6schemeyACyxGSS_yAA13URLPathMapperCyxGXEtFZ">scheme(_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Match some scheme.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">scheme</span><span class="p">(</span><span class="n">_</span> <span class="nv">scheme</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">_</span> <span class="nv">mapPathsClosure</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Classes/URLPathMapper.html">URLPathMapper</a></span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLMatcherGroup</span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7XRouter15URLMatcherGroupV5group5hosts7schemes_ACyxGAA13StringMatcherO_AIyAA13URLPathMapperCyxGXEtFZ"></a>
+                    <a name="//apple_ref/swift/Method/group(hosts:schemes:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7XRouter15URLMatcherGroupV5group5hosts7schemes_ACyxGAA13StringMatcherO_AIyAA13URLPathMapperCyxGXEtFZ">group(hosts:schemes:_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -172,35 +241,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">group</span><span class="p">(</span><span class="n">_</span> <span class="nv">hosts</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span>
-                         <span class="n">_</span> <span class="nv">mapPathsClosure</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Classes/URLPathMapper.html">URLPathMapper</a></span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLMatcherGroup</span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:7XRouter15URLMatcherGroupV5groupyACyxGSS_yAA13URLPathMapperCyxGXEtFZ"></a>
-                    <a name="//apple_ref/swift/Method/group(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7XRouter15URLMatcherGroupV5groupyACyxGSS_yAA13URLPathMapperCyxGXEtFZ">group(_:_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Set a group of mapped paths for a single host</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">group</span><span class="p">(</span><span class="n">_</span> <span class="nv">host</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">group</span><span class="p">(</span><span class="nv">hosts</span><span class="p">:</span> <span class="kt"><a href="../Enums/StringMatcher.html">StringMatcher</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">any</span><span class="p">,</span>
+                         <span class="nv">schemes</span><span class="p">:</span> <span class="kt"><a href="../Enums/StringMatcher.html">StringMatcher</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">any</span><span class="p">,</span>
                          <span class="n">_</span> <span class="nv">mapPathsClosure</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Classes/URLPathMapper.html">URLPathMapper</a></span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLMatcherGroup</span><span class="o">&lt;</span><span class="kt">Route</span><span class="o">&gt;</span></code></pre>
 
                         </div>
@@ -214,7 +256,7 @@
         </section>
         <section id="footer">
           <p>MIT License</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

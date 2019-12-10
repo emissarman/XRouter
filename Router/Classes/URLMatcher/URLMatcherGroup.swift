@@ -17,16 +17,21 @@ public struct URLMatcherGroup<Route: RouteType> {
     
     // MARK: - Helper methods
     
-    /// Set a group of mapped paths for multiple hosts
-    public static func group(_ hosts: [String],
-                             _ mapPathsClosure: (URLPathMapper<Route>) -> Void) -> URLMatcherGroup<Route> {
-        return .init(matchers: [URLMatcher(hosts: hosts, mapPathsClosure)])
+    /// Match some host.
+    public static func host(_ host: String, _ mapPathsClosure: (URLPathMapper<Route>) -> Void) -> URLMatcherGroup<Route> {
+        return .init(matchers: [.init(hosts: .one(host), schemes: .any, mapPathsClosure)])
     }
     
-    /// Set a group of mapped paths for a single host
-    public static func group(_ host: String,
+    /// Match some scheme.
+    public static func scheme(_ scheme: String, _ mapPathsClosure: (URLPathMapper<Route>) -> Void) -> URLMatcherGroup<Route> {
+        return .init(matchers: [.init(hosts: .any, schemes: .one(scheme), mapPathsClosure)])
+    }
+    
+    /// Set a group of mapped paths for multiple hosts
+    public static func group(hosts: StringMatcher = .any,
+                             schemes: StringMatcher = .any,
                              _ mapPathsClosure: (URLPathMapper<Route>) -> Void) -> URLMatcherGroup<Route> {
-        return group([host], mapPathsClosure)
+        return .init(matchers: [URLMatcher(hosts: hosts, schemes: schemes, mapPathsClosure)])
     }
     
     // MARK: - Methods

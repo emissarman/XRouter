@@ -42,6 +42,7 @@
 		2840E7BAA35C37FB72844821ED2534BB /* Skip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E927D00E736B03E88B2871EE1A223B /* Skip.swift */; };
 		2901DFD9220FC7CF0016EB5C /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2901DFD7220FC7CF0016EB5C /* Navigator.swift */; };
 		2901DFDA220FC7CF0016EB5C /* RouteHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2901DFD8220FC7CF0016EB5C /* RouteHandler.swift */; };
+		295AE662239F0EFB002DD213 /* StringMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295AE661239F0EFB002DD213 /* StringMatcher.swift */; };
 		29A9859F1680213FDDE5939A4B314A3C /* SubjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1F99E273565F1568CA0CD863E6B5AF /* SubjectType.swift */; };
 		29B4DDC7C36A800F9D1A78C11296C6DD /* Zip+arity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85131EC9C6759DC0D14735D2B103ED6 /* Zip+arity.swift */; };
 		2BA67643353F297846FECFE12AEF341D /* RxAtomic-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C97F384259EDC422C51C14E57FE3E62D /* RxAtomic-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -307,6 +308,7 @@
 		2901DFD7220FC7CF0016EB5C /* Navigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Navigator.swift; path = Router/Classes/Navigator.swift; sourceTree = "<group>"; };
 		2901DFD8220FC7CF0016EB5C /* RouteHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RouteHandler.swift; path = Router/Classes/RouteHandler.swift; sourceTree = "<group>"; };
 		29338A9AE89F9BF43952F5F1F36A5139 /* RefCountDisposable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RefCountDisposable.swift; path = RxSwift/Disposables/RefCountDisposable.swift; sourceTree = "<group>"; };
+		295AE661239F0EFB002DD213 /* StringMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringMatcher.swift; sourceTree = "<group>"; };
 		2A03F9A0A94E3687F87300B03F63CBF8 /* NopDisposable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NopDisposable.swift; path = RxSwift/Disposables/NopDisposable.swift; sourceTree = "<group>"; };
 		2A0FE3B30BE884A679CA2199287D23CC /* XRouter-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "XRouter-umbrella.h"; sourceTree = "<group>"; };
 		2B50643E2FB5E77F55464FF908816F96 /* SingleAsync.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SingleAsync.swift; path = RxSwift/Observables/SingleAsync.swift; sourceTree = "<group>"; };
@@ -596,6 +598,7 @@
 				6516E48EBF0C91C0C08D88339496A17A /* URLMatcher.swift */,
 				D3D74F50319B2AA4B9EBD24007562345 /* URLMatcherGroup.swift */,
 				2CD185BFDC9FA85BB8B677A70A1BA967 /* URLPathMapper.swift */,
+				295AE661239F0EFB002DD213 /* StringMatcher.swift */,
 			);
 			name = URLMatcher;
 			path = Router/Classes/URLMatcher;
@@ -1179,6 +1182,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
@@ -1252,6 +1256,7 @@
 				718742135A4D5897FD5851063F00E096 /* PathPattern.swift in Sources */,
 				306FC29B8C7A86C6E093AE9202C21382 /* RouteType.swift in Sources */,
 				81BDB634DC0ED6E611EF53A104027C4B /* Router+Rx.swift in Sources */,
+				295AE662239F0EFB002DD213 /* StringMatcher.swift in Sources */,
 				108A69F3D38904076C20D9685D0A4570 /* URLMatcher.swift in Sources */,
 				422E7F85550CE808960848628DF062CE /* URLMatcherGroup.swift in Sources */,
 				AC18067F1220DC8BB72098C5F5E5DA98 /* URLPathMapper.swift in Sources */,

@@ -47,9 +47,9 @@ public class PathPattern: ExpressibleByStringLiteral, Hashable {
     
     // MARK: - Hashable
     
-    /// Hashable
-    public var hashValue: Int {
-        return rawValue.hashValue
+    /// Hashable based on rawValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(rawValue)
     }
     
     /// Compares on raw strings

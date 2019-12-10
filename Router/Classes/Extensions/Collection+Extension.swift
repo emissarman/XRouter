@@ -5,7 +5,7 @@
 
 import Foundation
 
-extension Collection {
+internal extension Collection {
     
     /// Returns the element at the specified index if it is within bounds, otherwise nil.
     /// Source: https://stackoverflow.com/a/30593673

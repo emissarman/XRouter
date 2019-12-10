@@ -64,7 +64,7 @@ internal class Navigator<R: RouteType> {
         let destination: UIViewController
         
         do {
-            destination = try routeHandler.viewController(for: route)
+            destination = try routeHandler.prepareDestination(for: route)
         } catch {
             errorHandler(error)
             return
@@ -102,7 +102,7 @@ internal class Navigator<R: RouteType> {
         let source = source.navigationController ?? source
         
         // Perform the transition.
-        transition.execute(source, destination, animated, completion)
+        transition.performTransition(source, destination, animated, completion)
     }
     
 }
