@@ -19,7 +19,7 @@ Navigate anywhere in just one line.
 
 #### Define Routes
 ```swift
-enum Route: RouteType {
+enum AppRoute: RouteType {
     case newsfeed
     case login
     case signup
@@ -39,7 +39,7 @@ class Router: XRouter<AppRoute> {
         case .profile(let userID): return UserProfileViewController(withID: userID)
         }
     }
-
+    
 }
 ```
 
