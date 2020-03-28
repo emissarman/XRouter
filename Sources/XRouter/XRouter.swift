@@ -3,6 +3,8 @@
 //  XRouter
 //
 
+#if canImport(UIKit)
+
 import UIKit
 
 /**
@@ -141,3 +143,5 @@ open class XRouter<R: RouteType>: RouteHandler<R> {
     }
     
 }
+
+#endif

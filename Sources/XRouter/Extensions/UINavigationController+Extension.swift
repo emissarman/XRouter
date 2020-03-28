@@ -3,23 +3,30 @@
 //  XRouter
 //
 
+#if canImport(UIKit)
+
 import UIKit
 
 /**
- Variants of push/set navigation with a completion closure
+ Variants of push/set navigation with a completion closure.
+ 
  Source: https://stackoverflow.com/a/33767837
  Author: https://stackoverflow.com/users/312594/par
  */
 internal extension UINavigationController {
     
-    /// Push view controllers with completion closure
-    func pushViewController(_ viewController: UIViewController,
-                            animated: Bool,
-                            completion: @escaping () -> Void) {
+    func pushViewController(
+        _ viewController: UIViewController,
+        animated: Bool,
+        completion: @escaping () -> Void
+    ) {
         pushViewController(viewController, animated: animated)
         
         guard animated, let coordinator = transitionCoordinator else {
-            DispatchQueue.main.async { completion() }
+            DispatchQueue.main.async {
+                completion()
+            }
+            
             return
         }
         
@@ -28,10 +35,11 @@ internal extension UINavigationController {
         }
     }
     
-    /// Set view controllers with completion closure
-    func setViewControllers(_ viewControllers: [UIViewController],
-                            animated: Bool,
-                            completion: @escaping () -> Void) {
+    func setViewControllers(
+        _ viewControllers: [UIViewController],
+        animated: Bool,
+        completion: @escaping () -> Void
+    ) {
         setViewControllers(viewControllers, animated: animated)
         
         guard animated, let coordinator = transitionCoordinator else {
@@ -45,3 +53,5 @@ internal extension UINavigationController {
     }
     
 }
+
+#endif

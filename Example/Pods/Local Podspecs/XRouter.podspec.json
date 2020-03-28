@@ -1,30 +1,34 @@
 {
   "name": "XRouter",
-  "version": "1.2.3",
-  "summary": "The simple routing library for iOS.",
-  "description": "A simple routing library for iOS.\nSetup routes and map them to controllers, easy peasy.",
+  "version": "2.0.1",
+  "summary": "Navigate anywhere in just one line.",
+  "description": "Decouple your controllers using abstract routing.\n\nDefine application-level routes, add powerful deep-linking and stop writing\nthe same boilerplate over and over.",
   "homepage": "https://github.com/hubrioAU/XRouter",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "Reece Como": "reece@hubr.io"
+    "Reece Como": "reece.como@gmail.com"
   },
   "source": {
     "git": "https://github.com/hubrioAU/XRouter.git",
-    "tag": "1.2.3"
+    "tag": "2.0.1"
   },
   "platforms": {
-    "ios": "11.0"
+    "ios": "10.0"
   },
-  "swift_version": "4.2",
-  "source_files": "Router/Classes/*.swift",
+  "swift_versions": "4.2",
+  "source_files": "Sources/XRouter/*.swift",
   "default_subspecs": "Core",
   "subspecs": [
     {
       "name": "Core",
-      "source_files": "Router/Classes/*.swift",
+      "source_files": [
+        "Sources/XRouter/*.swift",
+        "Sources/XRouter/Extensions/*.swift",
+        "Sources/XRouter/URLMatcher/*.swift"
+      ],
       "frameworks": "UIKit"
     },
     {
@@ -37,7 +41,8 @@
           "~> 4.0"
         ]
       },
-      "source_files": "Router/Classes/RxSwift/*.swift"
+      "source_files": "Sources/XRouter/RxSwift/*.swift"
     }
-  ]
+  ],
+  "swift_version": "4.2"
 }

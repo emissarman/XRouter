@@ -3,6 +3,8 @@
 //  XRouter
 //
 
+#if canImport(UIKit)
+
 import UIKit
 
 /// Transition closure.
@@ -134,3 +136,5 @@ extension RouteTransition: Equatable {
     }
     
 }
+
+#endif

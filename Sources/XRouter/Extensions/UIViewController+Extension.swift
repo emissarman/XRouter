@@ -3,14 +3,11 @@
 //  XRouter
 //
 
+#if canImport(UIKit)
+
 import UIKit
 
-/**
- UIViewController extension
- */
 internal extension UIViewController {
-    
-    // MARK: - Methods
     
     /// Child if this is a container view controller, otherwise self.
     /// - Note: Currently does not handle split view controller
@@ -90,3 +87,5 @@ internal extension UIViewController {
     }
     
 }
+
+#endif

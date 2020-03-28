@@ -107,7 +107,7 @@ class RouterTests: ReactiveTestCase {
     /// Test assertion failure completion block path is triggered
     func testAssertionFailureCompletionBlockPathIsTriggered() {
         let router = XRouter<TestRoute>(window: nil)
-        router.navigate(to: .homeVC)
+        navigateExpectError(router, to: .homeVC, error: RouterError.missingSourceViewController)
     }
     
     /// Test missing source view controller

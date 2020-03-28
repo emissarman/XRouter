@@ -3,6 +3,8 @@
 //  XRouter
 //
 
+#if canImport(UIKit)
+
 import UIKit
 
 /**
@@ -106,3 +108,5 @@ internal class Navigator<R: RouteType> {
     }
     
 }
+
+#endif
