@@ -2,6 +2,9 @@
 
 Notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [v2.0.1](https://github.com/hubrioAU/XRouter/releases/tag/2.0.1)
+- Add Swift Package Manager support
+
 # [v2.0.0](https://github.com/hubrioAU/XRouter/releases/tag/2.0.0)
 - ([#31](https://github.com/hubrioAU/XRouter/pull/31)): Add wildcard host/scheme matching to URL matcher, rename param to path
 - ([#31](https://github.com/hubrioAU/XRouter/pull/31)): Update RouteTransitions

@@ -3,6 +3,8 @@
 //  XRouter
 //
 
+#if canImport(UIKit)
+
 import UIKit
 
 internal extension UITabBarController {
@@ -32,3 +34,5 @@ internal extension UITabBarController {
     }
     
 }
+
+#endif

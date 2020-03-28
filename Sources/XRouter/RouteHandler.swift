@@ -3,7 +3,9 @@
 //  XRouter
 //
 
-import Foundation
+#if canImport(UIKit)
+
+import UIKit
 
 /**
  Route Handler
@@ -43,3 +45,5 @@ open class RouteHandler<R: RouteType> {
     }
     
 }
+
+#endif
