@@ -209,6 +209,11 @@ To run the example project, clone the repo, and run it in Xcode 10.
 
 ## Installation
 
+### Swift Package Manager
+
+
+XRouter is available through Swift Package Manager from version `2.0.1` onwards.
+
 ### CocoaPods
 
 XRouter is available through [CocoaPods](https://cocoapods.org). To install
