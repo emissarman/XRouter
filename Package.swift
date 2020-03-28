@@ -10,6 +10,5 @@ let package = Package(
     dependencies: [],
     targets: [
         .target(name: "XRouter", dependencies: []),
-        .testTarget(name: "XRouterTests", dependencies: ["XRouter"]),
     ]
 )
