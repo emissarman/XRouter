@@ -16,12 +16,33 @@
 
 Decouple your code with abstract routes, add powerful deep-linking and ditch the boilerplate.
 
-## Get Started
+## Docs
 
-### Define App Routes
-Create an `AppRoute+Config.swift` file with your abstract routes in it.
+Complete [documentation is available here](https://hubrioau.github.io/XRouter/) and is generated using [Jazzy](https://github.com/realm/jazzy).
+
+## Get started
+
+### Install
+
+#### SPM (Swift Package Manager)
+
+XRouter is available via Swift Package Manager version `2.0.1` onwards.
+
+#### CocoaPods
+
+XRouter is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod 'XRouter'
+```
+
+### Basic Usage
+
+#### Defining Routes
+Create an `Route+Config.swift` file with your abstract routes in it.
 ```swift
-enum AppRoute: RouteType {
+enum Route: RouteType {
     case newsfeed
     case login
     case signup
@@ -29,12 +50,11 @@ enum AppRoute: RouteType {
 }
 ```
 
-#### Create a Router
+##### Create a Router
 Extend a concrete Router instance to resolve your view controllers.
 ```swift
-class Router: XRouter<AppRoute> {
-
-    override func prepareDestination(for route: AppRoute) throws -> UIViewController {
+class Router: XRouter<Route> {
+    override func prepareDestination(for route: Route) throws -> UIViewController {
         switch route {
         case .newsfeed: return
             newsfeedController.rootViewController
@@ -53,24 +73,16 @@ class Router: XRouter<AppRoute> {
             return UserProfileViewController().configured(with: profile)
         }
     }
-
 }
 ```
 
-#### Use
+##### Perform navigation
 ```swift
 // Navigate directly to a route
 router.navigate(to: .profile(3355))
 ```
 
 ### Advanced Usage
-
-### RxSwift
-XRouter also supports the RxSwift framework out of the box. Bindings exist for `navigate(to:)`, which returns a `Completable`, and `openURL(_:)`, which returns a `Single<Bool>`.
-```swift
-router.rx.navigate(to: .loginFlow) // -> Completable
-router.rx.openURL(url) // -> Single<Bool>
-```
 
 #### Deep Link Support
 
@@ -79,8 +91,7 @@ XRouter provides support for deep links and universal links.
 You only need to do one thing to add URL support for your routes.
 Implement the static method `registerURLs`:
 ```swift
-enum AppRoute: RouteType {
-
+enum Route: RouteType {
     static func registerURLs() -> URLMatcherGroup<Route>? {
         return .group {
             $0.map("/products") { .allProducts }
@@ -92,14 +103,12 @@ enum AppRoute: RouteType {
             }
         }
     }
-
 }
 ```
 
 Then you can call the `openURL(_:animated:completion:)` and/or `continue(_ userActivity:)` methods, e.g. from in your AppDelegate:
 ```swift
 extension AppDelegate {
-
     /// Handle deep links.
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         return router.openURL(url, animated: false)
@@ -109,7 +118,6 @@ extension AppDelegate {
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return router.continue(userActivity)
     }
-
 }
 ```
 
@@ -122,9 +130,8 @@ You can even define more advanced URL routing. For example, these rules could be
 * `https://api.example.com/user/my-user-name/logout` --> `.logout`
 
 ```swift
-enum AppRoute: RouteType {
-
-    static func registerURLs() -> URLMatcherGroup<AppRoute>? {
+enum Route: RouteType {
+    static func registerURLs() -> URLMatcherGroup<Route>? {
         return .init(matchers: [
             .host("example.com") {
                 $0.map("/login") { .login }
@@ -139,23 +146,19 @@ enum AppRoute: RouteType {
             }
         ])
     }
-
 }
 ```
 
-#### Handling errors
+#### Global error navigation handling
 
 If you handle all navigation errors in the same way, you can override the `received(unhandledError:)` method.
 
 ```swift
 class Router: XRouter<Route> {
-
     override func received(unhandledError error: Error) {
         log.error("Oh no! An error occured: \(error)")
     }
-
 }
-
 ```
 
 Or you can set a custom completion handler for some individual navigation action:
@@ -188,7 +191,7 @@ Define your custom transitions:
 
 And set the transition to your custom transition in your Router:
 ```swift
-    override func transition(for route: AppRoute) -> RouteTransition {
+    override func transition(for route: Route) -> RouteTransition {
         if case Route.profile = route {
           return heroCrossFade
         }
@@ -197,35 +200,16 @@ And set the transition to your custom transition in your Router:
     }
 ```
 
-## Documentation
-
-Complete [documentation is available here](https://hubrioau.github.io/XRouter/) and is generated using [Jazzy](https://github.com/realm/jazzy).
-
-## Example
-
-To run the example project, clone the repo, and run it in Xcode 10.
-
-## Requirements
-
-## Installation
-
-### Swift Package Manager
-
-
-XRouter is available through Swift Package Manager from version `2.0.1` onwards.
-
-### CocoaPods
-
-XRouter is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod 'XRouter'
+#### RxSwift Support
+XRouter also supports Rx out of the box. Bindings exist for `navigate(to:)`, which returns a `Completable`, and `openURL(_:)`, which returns a `Single<Bool>`.
+```swift
+router.rx.navigate(to: .loginFlow) // -> Completable
+router.rx.openURL(url) // -> Single<Bool>
 ```
 
-## Author
+## Demo Project
 
-Reece Como, reece@hubr.io
+To run the example project, clone the repo, and run it in the latest version of [Xcode](https://developer.apple.com/xcode/).
 
 ## License
 
