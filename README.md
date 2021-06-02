@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/hubrioau/XRouter/master/XRouter.jpg?17-Mar" alt="XRouter" width="400" style="max-width:400px;width:auto;height:auto;"/>
+<img src="https://raw.githubusercontent.com/hubrioau/XRouter/master/XRouter.png" alt="XRouter" width="400" style="max-width:400px;width:auto;height:auto;"/>
 </p>
 
 <p align="center">
