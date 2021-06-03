@@ -42,7 +42,8 @@ pod 'XRouter'
 ### Basic Usage
 
 #### Defining your routes
-Create a route file
+Create a file containing the routes for your application.
+
 ```swift
 enum Route: RouteType {
     case login
@@ -51,24 +52,17 @@ enum Route: RouteType {
 ```
 
 ##### Create a Router
-Configure a concrete instance of `XRouter` to resolve the first view controller for flows 
+Configure a concrete instance of `XRouter` to resolve a standalone view controller, or start a modal flow by passing a navigation controller.
 
 ```swift
 class Router: XRouter<Route> {
     override func prepareDestination(for route: Route) throws -> UIViewController {
         switch route {
         case .login:
-            let flowController = AuthLoginFlowController()
-            let initialViewController = flowController.start()
-            
-            return initialViewController
+            return AuthLoginFlowCoordinator().navigationController
 
         case .profile(let userID):
-            guard let profile = repo.fetch(user: userId) else {
-                throw NotFoundError("Could not find profile with that ID.")
-            }
-
-            return UserProfileViewController(profile: profile))
+            return UserProfileViewController(profile: try repo.fetch(user: userID))
         }
     }
 }
@@ -173,14 +167,14 @@ Here is an example using the popular [Hero Transitions](https://github.com/HeroT
 
 Define your custom transitions:
 ```swift
-  /// Hero cross fade transition
-  let heroCrossFade = RouteTransition { (source, dest, animated, completion) in
+  /// Perform a cross-fade transition using Hero library.
+  static let heroCrossFade = RouteTransition { (source, destination, animated, completion) in
       source.hero.isEnabled = true
-      dest.hero.isEnabled = true
-      dest.hero.modalAnimationType = .fade
+      destination.hero.isEnabled = true
+      destination.hero.modalAnimationType = .fade
 
-      // Present the hero animation
-      source.present(dest, animated: animated) {
+      /* Present the hero animation */
+      source.present(destination, animated: animated) {
           completion(nil)
       }
   }
@@ -189,8 +183,8 @@ Define your custom transitions:
 And set the transition to your custom transition in your Router:
 ```swift
     override func transition(for route: Route) -> RouteTransition {
-        if case Route.profile = route {
-          return heroCrossFade
+        if case .profile = route {
+          return .heroCrossFade
         }
 
         return .automatic
