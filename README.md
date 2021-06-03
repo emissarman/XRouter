@@ -3,18 +3,20 @@
 </p>
 
 <p align="center">
-<a href="https://travis-ci.org/hubrioAU/XRouter"><img src="https://travis-ci.org/hubrioAU/XRouter.svg?branch=master" alt="Build Status" /></a>
-<a href="https://codecov.io/gh/hubrioau/XRouter"><img src="https://codecov.io/gh/hubrioAU/XRouter/branch/master/graph/badge.svg" alt="CodeCov Badge" /></a>
+<a href="https://travis-ci.org/hubrioAU/XRouter"><img src="https://travis-ci.org/hubrioAU/XRouter.svg?branch=master" alt="Master Build Status" /></a>
+<a href="https://codecov.io/gh/hubrioau/XRouter"><img src="https://codecov.io/gh/hubrioAU/XRouter/branch/master/graph/badge.svg" alt="CodeCov" /></a>
 <a href="https://app.codacy.com/app/hubrioAU/XRouter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hubrioAU/XRouter&amp;utm_campaign=Badge_Grade_Dashboard"><img src="https://api.codacy.com/project/badge/Grade/d0ef88b70fc843adb2944ce0d956269d" alt="Codacy Badge" /></a>
+<a href="https://hubrioau.github.io/XRouter"><img src="https://img.shields.io/badge/📒%20docs-100%25-success.svg" alt="Documentation" /></a>
 <br/>
-<a href="https://hubrioau.github.io/XRouter"><img src="https://raw.githubusercontent.com/hubrioAU/XRouter/master/docs/badge.svg?sanitize=true" alt="Docs Badge" /></a>
-<a href="https://cocoapods.org/pods/XRouter"><img src="https://img.shields.io/cocoapods/v/XRouter.svg?style=flat" alt="Version" /></a>
+<a href="https://swift.org"><img src="https://img.shields.io/badge/swift%20package-v2.0.1-FF3527.svg" alt="Swift Package Manager Version" /></a>
+<a href="https://cocoapods.org/pods/XRouter"><img src="https://img.shields.io/cocoapods/v/XRouter.svg?style=flat" alt="Cocoapods Version" /></a>
 <a href="https://cocoapods.org/pods/XRouter"><img src="https://img.shields.io/cocoapods/l/XRouter.svg?style=flat" alt="License" /></a>
-<a href="https://swift.org"><img src="https://img.shields.io/badge/RxSwift-compatible-blueviolet.svg" alt="Language" /></a></p>
+<a href="https://swift.org"><img src="https://img.shields.io/badge/RxSwift-✔-blueviolet.svg" alt="Language" /></a>
+</p>
 
 # XRouter
 
-Decouple your code with abstract routes, add powerful deep-linking and ditch the boilerplate.
+Add powerful deep-linking, simplify navigation and ditch the expensive boilerplate.
 
 ## Docs
 
@@ -22,9 +24,9 @@ Complete [documentation is available here](https://hubrioau.github.io/XRouter/) 
 
 ## Get started
 
-### Install
+### Installation
 
-#### SPM (Swift Package Manager)
+#### Swift Package Manager (SPM)
 
 XRouter is available via Swift Package Manager version `2.0.1` onwards.
 
@@ -39,38 +41,34 @@ pod 'XRouter'
 
 ### Basic Usage
 
-#### Defining Routes
-Create an `Route+Config.swift` file with your abstract routes in it.
+#### Defining your routes
+Create a route file
 ```swift
 enum Route: RouteType {
-    case newsfeed
     case login
-    case signup
     case profile(userID: Int)
 }
 ```
 
 ##### Create a Router
-Extend a concrete Router instance to resolve your view controllers.
+Configure a concrete instance of `XRouter` to resolve the first view controller for flows 
+
 ```swift
 class Router: XRouter<Route> {
     override func prepareDestination(for route: Route) throws -> UIViewController {
         switch route {
-        case .newsfeed: return
-            newsfeedController.rootViewController
-
         case .login:
-            return LoginFlowCoordinator().start()
+            let flowController = AuthLoginFlowController()
+            let initialViewController = flowController.start()
+            
+            return initialViewController
 
-        case .signup:
-            return SignupFlowCoordinator().start()
-
-        case let .profile(userID):
-            guard let profile = profilesRepository.fetch(userId) else {
+        case .profile(let userID):
+            guard let profile = repo.fetch(user: userId) else {
                 throw NotFoundError("Could not find profile with that ID.")
             }
 
-            return UserProfileViewController().configured(with: profile)
+            return UserProfileViewController(profile: profile))
         }
     }
 }
@@ -78,8 +76,7 @@ class Router: XRouter<Route> {
 
 ##### Perform navigation
 ```swift
-// Navigate directly to a route
-router.navigate(to: .profile(3355))
+router.navigate(to: .profile(userID: 3355))
 ```
 
 ### Advanced Usage
