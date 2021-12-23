@@ -25,7 +25,7 @@ public typealias TransitionClosure = (_ from: UIViewController,
 public class RouteTransition {
   
     /// Transition storage
-    let performTransition: TransitionClosure
+    public let performTransition: TransitionClosure
 
     /// Constructor.
     public init(_ transition: @escaping TransitionClosure) {
@@ -113,7 +113,7 @@ public extension RouteTransition {
     // MARK: - Implementation
     
     /// Infer the best transition to use for two view controllers in the view hierachy.
-    private static func inferTransition(from source: UIViewController,
+    static func inferTransition(from source: UIViewController,
                                         to destination: UIViewController) -> RouteTransition {
         // We need to use a modal if we don't have a nav controller or we're moving to a new one.
         if !(source is UINavigationController) || destination is UINavigationController {
