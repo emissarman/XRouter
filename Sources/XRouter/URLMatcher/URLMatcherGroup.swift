@@ -13,7 +13,11 @@ public struct URLMatcherGroup<Route: RouteType> {
     // MARK: - Properties
     
     /// URL matchers
-    public let matchers: [URLMatcher<Route>]
+    public let matchers: [URLMatcher<Route>]!
+    
+    public init(matchers: [URLMatcher<Route>]) {
+        self.matchers = matchers
+    }
     
     // MARK: - Helper methods
     
