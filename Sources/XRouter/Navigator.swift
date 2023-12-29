@@ -58,9 +58,17 @@ internal class Navigator<R: RouteType> {
                                       animated: Bool,
                                       onSuccess successHandler: @escaping (_ source: UIViewController, _ destination: UIViewController) -> Void,
                                        onError errorHandler: @escaping (Error) -> Void) {
-        guard let source = rootViewController?.topViewController else {
+        var source: UIViewController
+        
+        guard let sourceVC = rootViewController?.topViewController else {
             errorHandler(RouterError.missingSourceViewController)
             return
+        }
+        
+        source = sourceVC
+        
+        if let sourceVC = source as? UISplitViewController, let secondaryVC = sourceVC.viewController(for: .secondary) {
+            source = secondaryVC
         }
         
         let destination: UIViewController
