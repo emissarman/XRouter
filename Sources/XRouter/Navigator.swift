@@ -67,8 +67,10 @@ internal class Navigator<R: RouteType> {
         
         source = sourceVC
         
-        if let sourceVC = source as? UISplitViewController, let secondaryVC = sourceVC.viewController(for: .secondary) {
-            source = secondaryVC
+        if #available(iOS 14.0, *) {
+            if let sourceVC = source as? UISplitViewController, let secondaryVC = sourceVC.viewController(for: .secondary) {
+                source = secondaryVC
+            }
         }
         
         let destination: UIViewController
